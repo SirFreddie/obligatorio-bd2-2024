@@ -16,4 +16,8 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./pages/admin/admin.routes').then(m => m.ADMIN_ROUTES),
   },
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];
