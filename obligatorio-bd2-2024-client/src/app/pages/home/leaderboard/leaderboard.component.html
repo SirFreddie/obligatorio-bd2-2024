@@ -1,1 +1,19 @@
-<p>leaderboard works!</p>
+<div class="container">
+  <h3 class="mt-3 mb-3">Leaderboard</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Position</th>
+        <th scope="col">Name</th>
+        <th scope="col">Score</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      <tr *ngFor="let user of users; let i = index">
+        <th scope="row">#{{ i + 1 }}</th>
+        <td>{{ user.name }} {{ user.surname }}</td>
+        <td>{{ user.score }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

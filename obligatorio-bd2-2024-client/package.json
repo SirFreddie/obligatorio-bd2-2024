@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "npx prettier . --write",
+    "prettier": "npx prettier . --write",
     "serve:ssr:obligatorio-bd2-2024-client": "node dist/obligatorio-bd2-2024-client/server/server.mjs"
   },
   "private": true,

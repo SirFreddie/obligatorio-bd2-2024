@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './fixture.component.html',
-  styleUrl: './fixture.component.scss'
+  styleUrl: './fixture.component.scss',
 })
-export class FixtureComponent {
-
-}
+export class FixtureComponent {}
