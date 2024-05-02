@@ -1,0 +1,30 @@
+{
+	"name": "obligatorio-bd2-2024-server",
+	"version": "1.0.0",
+	"main": "dist/app.js",
+	"scripts": {
+		"prebuild": "npx prettier --write . && tslint -c tslint.json -p tsconfig.json --fix",
+		"build": "tsc",
+		"prestart": "npm run build",
+		"start": "node .",
+		"dev": "npm run prebuild && nodemon ./src/app.ts",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "",
+	"license": "ISC",
+	"description": "",
+	"devDependencies": {
+		"@types/cors": "^2.8.13",
+		"@types/express": "^4.17.17",
+		"nodemon": "^3.1.0",
+		"prettier": "^2.8.8",
+		"ts-node": "^10.9.1",
+		"tslint": "^6.1.3",
+		"typescript": "^5.1.6"
+	},
+	"dependencies": {
+		"cors": "^2.8.5",
+		"dotenv": "^16.3.1",
+		"express": "^4.18.2"
+	}
+}

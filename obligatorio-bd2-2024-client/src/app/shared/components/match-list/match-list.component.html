@@ -1,0 +1,20 @@
+<div class="container">
+  <div class="card my-5" *ngFor="let match of matches">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>{{ match.teamLocale }}</div>
+        <div *ngIf="canPredict">
+          <button class="btn btn-success">Predict</button>
+        </div>
+        <div *ngIf="canEdit">
+          <button class="btn btn-primary">Edit</button>
+        </div>
+        <div>{{ match.teamVisitor }}</div>
+      </div>
+      <div class="card-footer d-flex justify-content-between">
+        <p>{{ match.date | date: 'full' }}</p>
+        <p>{{ match.phase }}</p>
+      </div>
+    </div>
+  </div>
+</div>

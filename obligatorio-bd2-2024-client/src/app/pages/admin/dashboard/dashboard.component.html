@@ -1,1 +1,63 @@
-<p>dashboard works!</p>
+<div class="container my-5">
+  <form [formGroup]="createMatchForm" class="row g-3">
+    <div class="col-md-6">
+      <label class="form-label">Local Team</label>
+      <select
+        class="form-select"
+        formControlName="localTeam"
+        (change)="updateSecondCountryOptions()">
+        <option value="" selected>-</option>
+        <option
+          *ngFor="let country of firstCountryOptions"
+          [value]="country.code">
+          {{ country.name }}
+        </option>
+      </select>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Visitor Team</label>
+      <select
+        class="form-select"
+        formControlName="visitorTeam"
+        (change)="updateFirstCountryOptions()">
+        <option value="" selected>-</option>
+        <option
+          *ngFor="let country of secondCountryOptions"
+          [value]="country.code">
+          {{ country.name }}
+        </option>
+      </select>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Match Phase</label>
+      <select class="form-select" formControlName="phase">
+        <option value="" selected>-</option>
+        <option *ngFor="let phase of phases" [value]="phase">
+          {{ phase }}
+        </option>
+      </select>
+    </div>
+    <div class="col-md-6 d-flex flex-column">
+      <label class="form-label">Date</label>
+      <p-calendar
+        formControlName="date"
+        [showTime]="true"
+        [minDate]="minDate"
+        dateFormat="dd/mm/yy"></p-calendar>
+    </div>
+
+    <div class="col-12">
+      <button
+        type="submit"
+        class="btn btn-success"
+        [disabled]="createMatchForm.invalid"
+        (click)="createMatch()">
+        Create Match
+      </button>
+    </div>
+  </form>
+  <hr class="mt-5" />
+  <div class="row">
+    <app-match-list [matches]="matches" [canEdit]="true"></app-match-list>
+  </div>
+</div>
