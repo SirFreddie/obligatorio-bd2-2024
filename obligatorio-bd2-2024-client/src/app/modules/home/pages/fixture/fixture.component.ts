@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
-import { IMatch } from '../../../core/models/interfaces/IMatch.interface';
-import { ApiService } from '../../../core/services/api.service';
-import { MatchListComponent } from '../../../shared/components/match-list/match-list.component';
+import { IMatch } from '../../../../core/models/interfaces/IMatch.interface';
+import { ApiService } from '../../../../core/services/api.service';
+import { MatchListComponent } from '../../../../shared/components/match-list/match-list.component';
 
 @Component({
   selector: 'app-fixture',
@@ -11,7 +11,7 @@ import { MatchListComponent } from '../../../shared/components/match-list/match-
   templateUrl: './fixture.component.html',
   styleUrl: './fixture.component.scss',
 })
-export class FixtureComponent implements OnInit {
+export default class FixtureComponent implements OnInit {
   apiService: ApiService = inject(ApiService);
 
   matches: IMatch[] = [];

@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { IUser } from '../../../core/models/interfaces/IUser.interface';
+import { IUser } from '../../../../core/models/interfaces/IUser.interface';
 import { CommonModule } from '@angular/common';
-import { ApiService } from '../../../core/services/api.service';
+import { ApiService } from '../../../../core/services/api.service';
 
 @Component({
   selector: 'app-leaderboard',
@@ -10,7 +10,7 @@ import { ApiService } from '../../../core/services/api.service';
   templateUrl: './leaderboard.component.html',
   styleUrl: './leaderboard.component.scss',
 })
-export class LeaderboardComponent implements OnInit {
+export default class LeaderboardComponent implements OnInit {
   users: IUser[] = [];
 
   apiService: ApiService = inject(ApiService);

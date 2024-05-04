@@ -4,20 +4,21 @@ export const routes: Routes = [
   {
     path: 'home',
     loadChildren: () =>
-      import('./pages/home/home.routes').then(m => m.HOME_ROUTES),
+      import('./modules/home/home.routes').then(r => r.HOME_ROUTES),
   },
   {
     path: 'auth',
     loadChildren: () =>
-      import('./pages/auth/auth.routes').then(m => m.AUTH_ROUTES),
+      import('./modules/auth/auth.routes').then(m => m.AUTH_ROUTES),
   },
   {
     path: 'admin',
     loadChildren: () =>
-      import('./pages/admin/admin.routes').then(m => m.ADMIN_ROUTES),
+      import('./modules/admin/admin.routes').then(m => m.ADMIN_ROUTES),
   },
   {
-    path: '**',
-    redirectTo: '',
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full',
   },
 ];

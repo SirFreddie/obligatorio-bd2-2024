@@ -3,9 +3,9 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { CalendarModule } from 'primeng/calendar';
-import { IMatch } from '../../../core/models/interfaces/IMatch.interface';
-import { ApiService } from '../../../core/services/api.service';
-import { MatchListComponent } from '../../../shared/components/match-list/match-list.component';
+import { IMatch } from '../../../../core/models/interfaces/IMatch.interface';
+import { ApiService } from '../../../../core/services/api.service';
+import { MatchListComponent } from '../../../../shared/components/match-list/match-list.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,7 +19,7 @@ import { MatchListComponent } from '../../../shared/components/match-list/match-
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
-export class DashboardComponent implements OnInit {
+export default class DashboardComponent implements OnInit {
   fb = inject(FormBuilder);
   apiService: ApiService = inject(ApiService);
 
