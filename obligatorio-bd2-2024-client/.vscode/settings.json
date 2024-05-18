@@ -2,5 +2,5 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "explorer.expandSingleFolderWorkspaces": true,
-  "files.autoSave": "off"
+  "files.autoSave": "afterDelay"
 }
