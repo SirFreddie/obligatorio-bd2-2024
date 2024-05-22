@@ -24,7 +24,23 @@ export const createUser = async (req: Request, res: Response) => {
 			user.password,
 			user.role,
 		];
-		const response = await pool.query(query, values);
+		await pool.query(query, values);
+
+		if (user.role === 'estudiante'){
+			const studentQuery = `
+                INSERT INTO student (CI_student, points)
+                VALUES (?, ?);
+            `;
+			const studentValues = [user.CI, 0];
+			await pool.query(studentQuery, studentValues);
+		} else if (user.role === 'admin'){
+			const adminQuery = `
+                INSERT INTO admin (CI_admin)
+                VALUES (?);
+            `;
+			const adminValues = [user.CI];
+			await pool.query(adminQuery, adminValues);
+		}
 
 		return res.status(200).json({
 			ok: true,
