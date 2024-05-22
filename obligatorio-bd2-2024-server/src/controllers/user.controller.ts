@@ -57,7 +57,7 @@ export const getPoints = async (req: Request, res: Response) => {
 
 		return res.status(200).json({
 			ok: true,
-			data: rows
+			data: rows,
 		});
 	} catch (error: any) {
 		console.log(error);
