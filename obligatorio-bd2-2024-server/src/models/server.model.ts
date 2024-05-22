@@ -1,12 +1,14 @@
 import cors from 'cors';
 import express, { Application } from 'express';
 import matchRoutes from '../routes/match.routes';
+import userRoutes from '../routes/user.routes';
 
 class Server {
 	private app: Application;
 	private port: string;
 	private apiPaths = {
 		matches: '/api/matches',
+		users: '/api/users',
 	};
 
 	constructor() {
@@ -36,6 +38,7 @@ class Server {
 
 	private routes(): void {
 		this.app.use(this.apiPaths.matches, matchRoutes);
+		this.app.use(this.apiPaths.users, userRoutes);
 	}
 }
 
