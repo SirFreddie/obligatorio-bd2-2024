@@ -1,5 +1,5 @@
 export interface IUser {
   name: string;
   surname: string;
-  score: number;
+  points: number;
 }

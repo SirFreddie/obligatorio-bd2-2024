@@ -16,10 +16,10 @@ export default class LeaderboardComponent implements OnInit {
   apiService: ApiService = inject(ApiService);
 
   ngOnInit() {
-    this.apiService.getUsers().subscribe({
+    this.apiService.getUserPoints().subscribe({
       next: users => {
         this.users = users;
-        this.users.sort((a, b) => b.score - a.score);
+        this.users.sort((a, b) => b.points - a.points);
       },
     });
   }
