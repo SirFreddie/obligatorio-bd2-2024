@@ -2,6 +2,8 @@ import cors from 'cors';
 import express, { Application } from 'express';
 import matchRoutes from '../routes/match.routes';
 import userRoutes from '../routes/user.routes';
+import { EmailService } from '../email/email.service';
+import { pool } from '../db/config';
 
 class Server {
 	private app: Application;
@@ -20,6 +22,9 @@ class Server {
 
 		// Routes
 		this.routes();
+
+		// Email sender
+		// this.emailSender();
 	}
 
 	public listen(): void {
@@ -39,6 +44,27 @@ class Server {
 	private routes(): void {
 		this.app.use(this.apiPaths.matches, matchRoutes);
 		this.app.use(this.apiPaths.users, userRoutes);
+	}
+
+	private async emailSender() {
+		try {
+			const emailService = new EmailService();
+			const query = `
+							SELECT mail
+							FROM user
+					`;
+			const [rows] = (await pool.query(query)) as any;
+
+			const emailAddresses = rows.map((row: any) => row.mail);
+
+			emailService.sendEmail({
+				to: emailAddresses,
+				subject: 'Test email',
+				htmlBody: '<h1>Test email</h1>',
+			});
+		} catch (error: any) {
+			console.log(error);
+		}
 	}
 }
 
