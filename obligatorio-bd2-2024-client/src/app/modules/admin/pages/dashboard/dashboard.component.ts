@@ -6,6 +6,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { IMatch } from '../../../../core/models/interfaces/IMatch.interface';
 import { ApiService } from '../../../../core/services/api.service';
 import { MatchListComponent } from '../../../../shared/components/match-list/match-list.component';
+import { ITeam } from '../../../../core/models/interfaces/ITeam.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -31,17 +32,7 @@ export default class DashboardComponent implements OnInit {
     'Partido por el tercer lugar',
     'Final',
   ];
-  countries: { code: string; name: string }[] = [
-    { code: 'ARG', name: 'Argentina' },
-    { code: 'BRA', name: 'Brasil' },
-    { code: 'CHI', name: 'Chile' },
-    { code: 'COL', name: 'Colombia' },
-    { code: 'ECU', name: 'Ecuador' },
-    { code: 'PAR', name: 'Paraguay' },
-    { code: 'PER', name: 'Peru' },
-    { code: 'URU', name: 'Uruguay' },
-    { code: 'VEN', name: 'Venezuela' },
-  ];
+  countries: ITeam[] = [];
 
   matches: IMatch[] = [];
 
@@ -52,8 +43,8 @@ export default class DashboardComponent implements OnInit {
     date: ['', [Validators.required]],
   });
 
-  firstCountryOptions: { code: string; name: string }[] = [...this.countries];
-  secondCountryOptions: { code: string; name: string }[] = [...this.countries];
+  firstCountryOptions: ITeam[] = [...this.countries];
+  secondCountryOptions: ITeam[] = [...this.countries];
 
   constructor() {}
 
@@ -61,6 +52,13 @@ export default class DashboardComponent implements OnInit {
     this.apiService.getNextMatches().subscribe({
       next: matches => {
         this.matches = matches;
+      },
+    });
+    this.apiService.getTeams().subscribe({
+      next: teams => {
+        this.countries = teams;
+        this.firstCountryOptions = [...this.countries];
+        this.secondCountryOptions = [...this.countries];
       },
     });
   }
@@ -71,15 +69,19 @@ export default class DashboardComponent implements OnInit {
 
   updateSecondCountryOptions(): void {
     const firstCountryValue = this.createMatchForm.get('localTeam')?.value;
-    this.secondCountryOptions = this.countries.filter(
-      country => country.code !== firstCountryValue
-    );
+    if (firstCountryValue) {
+      this.secondCountryOptions = this.countries.filter(
+        country => country.idteam !== parseInt(firstCountryValue)
+      );
+    }
   }
 
   updateFirstCountryOptions(): void {
     const secondCountryValue = this.createMatchForm.get('visitorTeam')?.value;
-    this.firstCountryOptions = this.countries.filter(
-      country => country.code !== secondCountryValue
-    );
+    if (secondCountryValue) {
+      this.firstCountryOptions = this.countries.filter(
+        country => country.idteam !== parseInt(secondCountryValue)
+      );
+    }
   }
 }
