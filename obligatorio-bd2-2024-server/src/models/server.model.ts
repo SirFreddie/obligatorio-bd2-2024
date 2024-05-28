@@ -2,6 +2,7 @@ import cors from 'cors';
 import express, { Application } from 'express';
 import matchRoutes from '../routes/match.routes';
 import userRoutes from '../routes/user.routes';
+import teamRoutes from '../routes/team.routes';
 import { EmailService } from '../email/email.service';
 import { pool } from '../db/config';
 
@@ -11,6 +12,7 @@ class Server {
 	private apiPaths = {
 		matches: '/api/matches',
 		users: '/api/users',
+		teams: '/api/teams',
 	};
 
 	constructor() {
@@ -44,6 +46,7 @@ class Server {
 	private routes(): void {
 		this.app.use(this.apiPaths.matches, matchRoutes);
 		this.app.use(this.apiPaths.users, userRoutes);
+		this.app.use(this.apiPaths.teams, teamRoutes);
 	}
 
 	private async emailSender() {

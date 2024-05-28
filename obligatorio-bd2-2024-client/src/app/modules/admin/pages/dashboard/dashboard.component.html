@@ -9,7 +9,7 @@
         <option value="" selected>-</option>
         <option
           *ngFor="let country of firstCountryOptions"
-          [value]="country.code">
+          [value]="country.idteam">
           {{ country.name }}
         </option>
       </select>
@@ -23,7 +23,7 @@
         <option value="" selected>-</option>
         <option
           *ngFor="let country of secondCountryOptions"
-          [value]="country.code">
+          [value]="country.idteam">
           {{ country.name }}
         </option>
       </select>
