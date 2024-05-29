@@ -19,7 +19,6 @@ export default class LeaderboardComponent implements OnInit {
     this.apiService.getUserPoints().subscribe({
       next: users => {
         this.users = users;
-        this.users.sort((a, b) => b.points - a.points);
       },
     });
   }

@@ -67,7 +67,8 @@ export const getPoints = async (req: Request, res: Response) => {
 		const query = `
             SELECT u.name, u.surname, s.points
             FROM user u
-            JOIN student s ON u.CI = s.CI_student;
+            JOIN student s ON u.CI = s.CI_student
+						ORDER BY s.points DESC;
         `;
 		const [rows] = await pool.query(query);
 
