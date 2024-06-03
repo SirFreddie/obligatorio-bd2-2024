@@ -1,1 +1,61 @@
-<p>register works!</p>
+<div class="section">
+    <div class="container">
+        <div class="row full-height justify-content-center">
+            <div class="col-12 text-center align-self-center py-5">
+                <div class="section pb-5 pt-5 pt-sm-2 text-center">
+                    <div class="card-3d-wrap mx-auto">
+                        <div class="card-3d-wrapper">
+                            <div class="card-front">
+                                <div class="center-wrap">
+                                    <div class="section text-center">
+                                        <h4 class="mb-4 pb-3">Registrarse</h4>
+                                        <form novalidate [formGroup]="formulario" >
+                                            <div class="form-group">
+                                                <input type="text" formControlName="nombre" class="form-style"
+                                                    placeholder="Ingresa tu nombre" id="logname" autocomplete="off">
+                                                <i class="input-icon uil uil-user"></i>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="text" formControlName="apellido" class="form-style"
+                                                    placeholder="Ingresa tu apellido" id="logapellido" autocomplete="off">
+                                                <i class="input-icon uil uil-user"></i>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="text" formControlName="cedula" class="form-style"
+                                                    placeholder="Ingresa tu cédula" id="logcedula" autocomplete="off">
+                                                <i class="input-icon uil uil-user"></i>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="email" formControlName="email" class="form-style" placeholder="Email"
+                                                    id="logemail" autocomplete="off">
+                                                <i class="input-icon uil uil-at"></i>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="password" formControlName="password" class="form-style"
+                                                    placeholder="Contraseña" id="logpass" autocomplete="off">
+                                                <i class="input-icon uil uil-lock-alt"></i>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="text" formControlName="campeon" class="form-style"
+                                                    placeholder="Campeón" id="logpcampeon" autocomplete="off">
+                                                <i class="input-icon uil uil-lock-alt"></i>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="text" formControlName="subcampeon" class="form-style"
+                                                    placeholder="Sub Campeón" id="logsubcampeon" autocomplete="off">
+                                                <i class="input-icon uil uil-lock-alt"></i>
+                                            </div>
+                                            <button (click)="onSubmit()" class="btn mt-4">Registrarse</button>
+                                        
+                                        </form>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
