@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { IMatch } from '../../../core/models/interfaces/IMatch.interface';
+import { IGame } from '../../../core/models/interfaces/IGame.interface';
 
 @Component({
   selector: 'app-match-list',
@@ -10,7 +10,7 @@ import { IMatch } from '../../../core/models/interfaces/IMatch.interface';
   styleUrl: './match-list.component.scss',
 })
 export class MatchListComponent {
-  @Input() matches: IMatch[] = [];
+  @Input() matches: IGame[] = [];
   @Input() canEdit: boolean = false;
   @Input() canPredict: boolean = false;
 }

@@ -1,11 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, map, of } from 'rxjs';
-import { UsersMock } from '../models/mocks/User.mock';
 import { IUser } from '../models/interfaces/IUser.interface';
-import { IMatch } from '../models/interfaces/IMatch.interface';
-import { NextMatchesMock } from '../models/mocks/Match.mock';
+
 import { HttpClient } from '@angular/common/http';
 import { ITeam } from '../models/interfaces/ITeam.interface';
+import { IGame } from '../models/interfaces/IGame.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -18,11 +17,25 @@ export class ApiService {
   constructor() {}
 
   getUsers(): Observable<IUser[]> {
-    return of(UsersMock);
+    return of([]);
   }
 
-  getNextMatches(): Observable<IMatch[]> {
-    return of(NextMatchesMock);
+  getNextGames(): Observable<IGame[]> {
+    return this.http.get(`${this.baseUrl}/games`).pipe(
+      map((res: any) => {
+        const games = res.data.map((game: any) => {
+          return {
+            date: new Date(game.date),
+            teamLocale: game.team_id_local,
+            teamVisitor: game.team_id_visitor,
+            scoreLocale: game.local_result,
+            scoreVisitor: game.visitor_result,
+            stage: game.stage,
+          };
+        });
+        return games;
+      })
+    );
   }
 
   getUserPoints(): Observable<any> {
@@ -35,5 +48,15 @@ export class ApiService {
     return this.http
       .get(`${this.baseUrl}/teams`)
       .pipe(map((res: any) => res.data));
+  }
+
+  createGame(game: any): Observable<any> {
+    const newGame = {
+      stage: game.stage,
+      team_id_local: game.localTeam,
+      team_id_visitor: game.visitorTeam,
+      date: game.date,
+    };
+    return this.http.post(`${this.baseUrl}/games/new`, newGame);
   }
 }

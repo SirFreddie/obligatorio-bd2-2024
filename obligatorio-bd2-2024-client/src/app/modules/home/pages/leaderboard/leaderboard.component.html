@@ -9,10 +9,10 @@
       </tr>
     </thead>
     <tbody class="table-group-divider">
-      <tr *ngFor="let user of users; let i = index">
+      <tr *ngFor="let student of students; let i = index">
         <th scope="row">#{{ i + 1 }}</th>
-        <td>{{ user.name }} {{ user.surname }}</td>
-        <td>{{ user.points }}</td>
+        <td>{{ student.name }} {{ student.surname }}</td>
+        <td>{{ student.points }}</td>
       </tr>
     </tbody>
   </table>
