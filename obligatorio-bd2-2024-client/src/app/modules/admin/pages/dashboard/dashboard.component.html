@@ -9,7 +9,7 @@
         <option value="" selected>-</option>
         <option
           *ngFor="let country of firstCountryOptions"
-          [value]="country.idteam">
+          [value]="country.team_id">
           {{ country.name }}
         </option>
       </select>
@@ -23,17 +23,17 @@
         <option value="" selected>-</option>
         <option
           *ngFor="let country of secondCountryOptions"
-          [value]="country.idteam">
+          [value]="country.team_id">
           {{ country.name }}
         </option>
       </select>
     </div>
     <div class="col-md-6">
-      <label class="form-label">Match Phase</label>
-      <select class="form-select" formControlName="phase">
+      <label class="form-label">Match Stage</label>
+      <select class="form-select" formControlName="stage">
         <option value="" selected>-</option>
-        <option *ngFor="let phase of phases" [value]="phase">
-          {{ phase }}
+        <option *ngFor="let stage of stages" [value]="stage">
+          {{ stage }}
         </option>
       </select>
     </div>

@@ -22,10 +22,10 @@ export const getTeams = async (req: Request, res: Response) => {
 
 export const getTeamById = async (req: Request, res: Response) => {
 	try {
-		const { idteam } = req.params;
+		const { team_id } = req.params;
 		const query = {
-			sql: `SELECT * FROM team WHERE idteam = ?`,
-			values: [idteam],
+			sql: `SELECT * FROM team WHERE team_id = ?`,
+			values: [team_id],
 		};
 		const response = (await pool.query(query)) as any;
 

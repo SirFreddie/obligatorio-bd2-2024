@@ -3,7 +3,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { CalendarModule } from 'primeng/calendar';
-import { IMatch } from '../../../../core/models/interfaces/IMatch.interface';
+import { IGame } from '../../../../core/models/interfaces/IGame.interface';
 import { ApiService } from '../../../../core/services/api.service';
 import { MatchListComponent } from '../../../../shared/components/match-list/match-list.component';
 import { ITeam } from '../../../../core/models/interfaces/ITeam.interface';
@@ -25,7 +25,7 @@ export default class DashboardComponent implements OnInit {
   apiService: ApiService = inject(ApiService);
 
   minDate = new Date();
-  phases: string[] = [
+  stages: string[] = [
     'Fase de grupos',
     'Cuartos de final',
     'Semifinal',
@@ -34,12 +34,12 @@ export default class DashboardComponent implements OnInit {
   ];
   countries: ITeam[] = [];
 
-  matches: IMatch[] = [];
+  matches: IGame[] = [];
 
   createMatchForm = this.fb.group({
     localTeam: ['', [Validators.required]],
     visitorTeam: ['', [Validators.required]],
-    phase: ['', [Validators.required]],
+    stage: ['', [Validators.required]],
     date: ['', [Validators.required]],
   });
 
@@ -49,7 +49,7 @@ export default class DashboardComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.apiService.getNextMatches().subscribe({
+    this.apiService.getNextGames().subscribe({
       next: matches => {
         this.matches = matches;
       },
@@ -64,14 +64,23 @@ export default class DashboardComponent implements OnInit {
   }
 
   createMatch(): void {
-    console.log(this.createMatchForm.value);
+    this.apiService.createGame(this.createMatchForm.value).subscribe({
+      next: () => {
+        this.apiService.getNextGames().subscribe({
+          next: matches => {
+            this.matches = matches;
+            this.createMatchForm.reset();
+          },
+        });
+      },
+    });
   }
 
   updateSecondCountryOptions(): void {
     const firstCountryValue = this.createMatchForm.get('localTeam')?.value;
     if (firstCountryValue) {
       this.secondCountryOptions = this.countries.filter(
-        country => country.idteam !== parseInt(firstCountryValue)
+        country => country.team_id !== firstCountryValue
       );
     }
   }
@@ -80,7 +89,7 @@ export default class DashboardComponent implements OnInit {
     const secondCountryValue = this.createMatchForm.get('visitorTeam')?.value;
     if (secondCountryValue) {
       this.firstCountryOptions = this.countries.filter(
-        country => country.idteam !== parseInt(secondCountryValue)
+        country => country.team_id !== secondCountryValue
       );
     }
   }

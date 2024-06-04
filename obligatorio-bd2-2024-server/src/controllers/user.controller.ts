@@ -4,43 +4,34 @@ import { Request, Response } from 'express';
 export const createUser = async (req: Request, res: Response) => {
 	try {
 		const user: {
-			CI: number;
+			user_id: number;
 			name: string;
 			surname: string;
 			mail: string;
 			password: string;
-			role: string;
+			first_place_prediction: string;
+			second_place_prediction: string;
 		} = req.body;
 
 		const query = `
-            INSERT INTO user (CI, name, surname, mail, password, role)
-            VALUES (?, ?, ?, ?, ?, ?);
+            INSERT INTO user (user_id, name, surname, email, password)
+            VALUES (?, ?, ?, ?, ?);
         `;
 		const values = [
-			user.CI,
+			user.user_id,
 			user.name,
 			user.surname,
 			user.mail,
 			user.password,
-			user.role,
 		];
 		await pool.query(query, values);
 
-		if (user.role === 'estudiante') {
-			const studentQuery = `
-                INSERT INTO student (CI_student, points)
+		const studentQuery = `
+                INSERT INTO student (student_id, first_place_prediction, second_place_prediction)
                 VALUES (?, ?);
             `;
-			const studentValues = [user.CI, 0];
-			await pool.query(studentQuery, studentValues);
-		} else if (user.role === 'admin') {
-			const adminQuery = `
-                INSERT INTO admin (CI_admin)
-                VALUES (?);
-            `;
-			const adminValues = [user.CI];
-			await pool.query(adminQuery, adminValues);
-		}
+		const studentValues = [user.user_id, 0];
+		await pool.query(studentQuery, studentValues);
 
 		return res.status(200).json({
 			ok: true,
@@ -67,7 +58,7 @@ export const getPoints = async (req: Request, res: Response) => {
 		const query = `
             SELECT u.name, u.surname, s.points
             FROM user u
-            JOIN student s ON u.CI = s.CI_student
+            JOIN student s ON u.user_id = s.student_id
 						ORDER BY s.points DESC;
         `;
 		const [rows] = await pool.query(query);

@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { IUser } from '../../../../core/models/interfaces/IUser.interface';
+import { IStudent } from '../../../../core/models/interfaces/IUser.interface';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../../../core/services/api.service';
 
@@ -11,14 +11,14 @@ import { ApiService } from '../../../../core/services/api.service';
   styleUrl: './leaderboard.component.scss',
 })
 export default class LeaderboardComponent implements OnInit {
-  users: IUser[] = [];
+  students: IStudent[] = [];
 
   apiService: ApiService = inject(ApiService);
 
   ngOnInit() {
     this.apiService.getUserPoints().subscribe({
-      next: users => {
-        this.users = users;
+      next: students => {
+        this.students = students;
       },
     });
   }
