@@ -1,5 +1,7 @@
 CREATE DATABASE IF NOT EXISTS `penca_ucu`;
 
+USE `penca_ucu`;
+
 CREATE TABLE IF NOT EXISTS `penca_ucu`.`user` (
   `user_id` INT NOT NULL,
   `name` VARCHAR(45) NOT NULL,
@@ -93,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `penca_ucu`.`student_career` (
   FOREIGN KEY (`student_id`) REFERENCES `penca_ucu`.`student` (`student_id`)
 );
 
-CREATE TABLE IF NOT EXISTS `penca_ucu`.`game` (
+CREATE TABLE IF NOT EXISTS `game` (
   `stage` ENUM (
     'Fase de grupos',
     'Cuartos de final',
@@ -113,11 +115,28 @@ CREATE TABLE IF NOT EXISTS `penca_ucu`.`game` (
   CONSTRAINT chk_different_teams CHECK (`team_id_local` <> `team_id_visitor`)
 );
 
+DELIMITER $$
+
+CREATE TRIGGER `before_game_insert` 
+BEFORE INSERT ON `game`
+FOR EACH ROW
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM `game`
+    WHERE (`team_id_local` = NEW.`team_id_local` AND `team_id_visitor` = NEW.`team_id_visitor` AND `stage` = NEW.`stage`)
+       OR (`team_id_local` = NEW.`team_id_visitor` AND `team_id_visitor` = NEW.`team_id_local` AND `stage` = NEW.`stage`)
+  ) THEN
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'This combination of teams and stage already exists.';
+  END IF;
+END$$
+
+DELIMITER ;
+
 CREATE TABLE IF NOT EXISTS `penca_ucu`.`prediction` (
-  `prediction_id` INT NOT NULL AUTO_INCREMENT,
   `local_result` INT NOT NULL,
   `visitor_result` INT NOT NULL,
-  `points` INT,
   `student_id` INT NOT NULL,
   `team_id_local` VARCHAR(3),
   `team_id_visitor` VARCHAR(3),
@@ -128,7 +147,9 @@ CREATE TABLE IF NOT EXISTS `penca_ucu`.`prediction` (
     'Partido por el tercer lugar',
     'Final'
   ) NOT NULL,
-  PRIMARY KEY (`prediction_id`),
+  `points` INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`student_id`,`stage`, `team_id_local`, `team_id_visitor`),
+  UNIQUE (`student_id`, `team_id_local`, `team_id_visitor`, `stage`),
   FOREIGN KEY (`student_id`) REFERENCES `penca_ucu`.`student` (`student_id`),
   FOREIGN KEY (`team_id_local`, `team_id_visitor`, `stage`) REFERENCES `penca_ucu`.`game` (`team_id_local`, `team_id_visitor`, `stage`)
 );

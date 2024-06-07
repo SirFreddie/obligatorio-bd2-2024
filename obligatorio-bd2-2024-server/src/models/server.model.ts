@@ -4,6 +4,7 @@ import gameRoutes from '../routes/game.routes';
 import userRoutes from '../routes/user.routes';
 import teamRoutes from '../routes/team.routes';
 import careerRoutes from '../routes/career.routes';
+import predictionRoutes from '../routes/prediction.routes';
 import { EmailService } from '../email/email.service';
 import { pool } from '../db/config';
 
@@ -15,6 +16,7 @@ class Server {
 		teams: '/api/teams',
 		games: '/api/games',
 		careers: '/api/careers',
+		predictions: '/api/predictions',
 	};
 
 	constructor() {
@@ -50,6 +52,7 @@ class Server {
 		this.app.use(this.apiPaths.teams, teamRoutes);
 		this.app.use(this.apiPaths.games, gameRoutes);
 		this.app.use(this.apiPaths.careers, careerRoutes);
+		this.app.use(this.apiPaths.predictions, predictionRoutes);
 	}
 
 	private async emailSender() {

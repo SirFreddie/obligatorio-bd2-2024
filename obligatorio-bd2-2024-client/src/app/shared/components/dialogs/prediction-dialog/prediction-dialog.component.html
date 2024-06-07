@@ -1,0 +1,36 @@
+<div class="d-flex flex-column gap-4">
+  <div class="d-flex gap-2">
+    <div>
+      <div>
+        {{ game.teamLocale }}
+      </div>
+      <div>
+        <input
+          [formControl]="localResult"
+          class="form-control"
+          type="number"
+          min="0" />
+      </div>
+    </div>
+    <div>
+      <div>
+        {{ game.teamVisitor }}
+      </div>
+      <div>
+        <input
+          [formControl]="visitorResult"
+          class="form-control"
+          type="number"
+          min="0" />
+      </div>
+    </div>
+  </div>
+  <button
+    type="submit"
+    class="btn btn-success"
+    [disabled]="localResult.invalid || visitorResult.invalid"
+    (click)="close(true)">
+    Submit
+  </button>
+  <button class="btn btn-danger" (click)="close(false)">Cancel</button>
+</div>

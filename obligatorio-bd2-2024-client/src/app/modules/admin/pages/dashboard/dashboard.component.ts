@@ -7,6 +7,11 @@ import { IGame } from '../../../../core/models/interfaces/IGame.interface';
 import { ApiService } from '../../../../core/services/api.service';
 import { MatchListComponent } from '../../../../shared/components/match-list/match-list.component';
 import { ITeam } from '../../../../core/models/interfaces/ITeam.interface';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { STAGES } from '../../../../shared/helpers/constants';
+import { MatchTabsComponent } from '../../../../shared/components/match-tabs/match-tabs.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,25 +21,25 @@ import { ITeam } from '../../../../core/models/interfaces/ITeam.interface';
     ReactiveFormsModule,
     CalendarModule,
     MatchListComponent,
+    ConfirmDialogModule,
+    ToastModule,
+    MatchTabsComponent,
   ],
+  providers: [ConfirmationService, MessageService],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
 export default class DashboardComponent implements OnInit {
   fb = inject(FormBuilder);
   apiService: ApiService = inject(ApiService);
+  confirmationService: ConfirmationService = inject(ConfirmationService);
+  messageService: MessageService = inject(MessageService);
 
   minDate = new Date();
-  stages: string[] = [
-    'Fase de grupos',
-    'Cuartos de final',
-    'Semifinal',
-    'Partido por el tercer lugar',
-    'Final',
-  ];
+  stages: string[] = STAGES;
   countries: ITeam[] = [];
 
-  matches: IGame[] = [];
+  games: IGame[] = [];
 
   createMatchForm = this.fb.group({
     localTeam: ['', [Validators.required]],
@@ -50,8 +55,8 @@ export default class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.apiService.getNextGames().subscribe({
-      next: matches => {
-        this.matches = matches;
+      next: games => {
+        this.games = games;
       },
     });
     this.apiService.getTeams().subscribe({
@@ -67,12 +72,42 @@ export default class DashboardComponent implements OnInit {
     this.apiService.createGame(this.createMatchForm.value).subscribe({
       next: () => {
         this.apiService.getNextGames().subscribe({
-          next: matches => {
-            this.matches = matches;
+          next: games => {
+            this.games = games;
             this.createMatchForm.reset();
+            this.firstCountryOptions = [...this.countries];
+            this.secondCountryOptions = [...this.countries];
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Confirmed',
+              detail: 'You have created a match.',
+              life: 3000,
+            });
           },
         });
       },
+      error: error => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error.error.message,
+          life: 3000,
+        });
+      },
+    });
+  }
+
+  openCreateMatchDialog(event: Event) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message:
+        'Are you sure that you want to proceed? \nThis action cannot be undone and will make the game visible.',
+      header: 'Confirmation',
+      rejectButtonStyleClass: 'p-button-text',
+      accept: () => {
+        this.createMatch();
+      },
+      reject: () => {},
     });
   }
 

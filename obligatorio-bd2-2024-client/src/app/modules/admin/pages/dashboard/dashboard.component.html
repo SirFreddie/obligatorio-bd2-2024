@@ -1,4 +1,4 @@
-<div class="container my-5">
+<div class="container-fluid mt-3">
   <form [formGroup]="createMatchForm" class="row g-3">
     <div class="col-md-6">
       <label class="form-label">Local Team</label>
@@ -29,7 +29,7 @@
       </select>
     </div>
     <div class="col-md-6">
-      <label class="form-label">Match Stage</label>
+      <label class="form-label">Game Stage</label>
       <select class="form-select" formControlName="stage">
         <option value="" selected>-</option>
         <option *ngFor="let stage of stages" [value]="stage">
@@ -51,13 +51,16 @@
         type="submit"
         class="btn btn-success"
         [disabled]="createMatchForm.invalid"
-        (click)="createMatch()">
-        Create Match
+        (click)="openCreateMatchDialog($event)">
+        Create Game
       </button>
     </div>
   </form>
   <hr class="mt-5" />
   <div class="row">
-    <app-match-list [matches]="matches" [canEdit]="true"></app-match-list>
+    <app-match-tabs [games]="games"></app-match-tabs>
   </div>
 </div>
+
+<p-toast position="bottom-center" />
+<p-confirmDialog />
