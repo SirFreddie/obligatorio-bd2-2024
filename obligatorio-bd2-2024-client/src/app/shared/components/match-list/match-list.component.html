@@ -1,20 +1,34 @@
 <div class="container">
-  <div class="card my-5" *ngFor="let match of matches">
+  <div class="card my-5" *ngFor="let game of games">
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <div>{{ match.teamLocale }}</div>
+        <div>{{ game.teamLocale }}</div>
+        <div>{{ game.scoreLocale !== null ? game.scoreLocale : '-' }}</div>
         <div *ngIf="canPredict">
-          <button class="btn btn-success">Predict</button>
+          <button
+            class="btn btn-success"
+            [disabled]="!checkIfCanPredict(game)"
+            (click)="createPrediction(game)">
+            Predict
+          </button>
         </div>
         <div *ngIf="canEdit">
-          <button class="btn btn-primary">Edit</button>
+          <button
+            class="btn btn-primary"
+            [disabled]="checkIfCanEdit(game)"
+            (click)="updateGame(game)">
+            Edit
+          </button>
         </div>
-        <div>{{ match.teamVisitor }}</div>
+        <div>{{ game.scoreVisitor !== null ? game.scoreVisitor : '-' }}</div>
+        <div>{{ game.teamVisitor }}</div>
       </div>
       <div class="card-footer d-flex justify-content-between">
-        <p>{{ match.date | date: 'full' }}</p>
-        <p>{{ match.stage }}</p>
+        <p>{{ game.date | date: 'full' }}</p>
+        <p>{{ game.stage }}</p>
       </div>
     </div>
   </div>
 </div>
+
+<p-toast position="bottom-center" />

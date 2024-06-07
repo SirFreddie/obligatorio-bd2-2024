@@ -5,6 +5,7 @@ import { IUser } from '../models/interfaces/IUser.interface';
 import { HttpClient } from '@angular/common/http';
 import { ITeam } from '../models/interfaces/ITeam.interface';
 import { IGame } from '../models/interfaces/IGame.interface';
+import { IPrediction } from '../models/interfaces/IPrediction.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -58,5 +59,13 @@ export class ApiService {
       date: game.date,
     };
     return this.http.post(`${this.baseUrl}/games/new`, newGame);
+  }
+
+  updateGame(game: IGame): Observable<any> {
+    return this.http.put(`${this.baseUrl}/games`, game);
+  }
+
+  createPrediction(prediction: IPrediction): Observable<any> {
+    return this.http.post(`${this.baseUrl}/predictions/new`, prediction);
   }
 }
