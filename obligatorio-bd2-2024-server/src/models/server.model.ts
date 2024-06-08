@@ -7,6 +7,7 @@ import careerRoutes from '../routes/career.routes';
 import predictionRoutes from '../routes/prediction.routes';
 import { EmailService } from '../email/email.service';
 import { pool } from '../db/config';
+import cron from 'node-cron';
 
 class Server {
 	private app: Application;
@@ -29,8 +30,8 @@ class Server {
 		// Routes
 		this.routes();
 
-		// Email sender
-		// this.emailSender();
+		// Cron jobs
+		this.cronJobs();
 	}
 
 	public listen(): void {
@@ -55,24 +56,50 @@ class Server {
 		this.app.use(this.apiPaths.predictions, predictionRoutes);
 	}
 
+	private async cronJobs() {
+		console.log('Cron job started');
+		cron.schedule('0 * * * *', async () => {
+			await this.emailSender();
+		});
+	}
+
 	private async emailSender() {
+		console.log('Checking for games starting in 24 hours...');
 		try {
 			const emailService = new EmailService();
+
+			const getUpcomingGamesQuery = `
+					SELECT stage, MIN(date) as first_match_date
+					FROM game
+					WHERE date >= NOW() AND date <= DATE_ADD(NOW(), INTERVAL 1 DAY)
+					GROUP BY stage;
+			`;
+			const [upcomingGames] = (await pool.query(getUpcomingGamesQuery)) as any;
 			const query = `
-							SELECT mail
+							SELECT email
 							FROM user
 					`;
-			const [rows] = (await pool.query(query)) as any;
+			const [emailAddresses] = (await pool.query(query)) as any[];
 
-			const emailAddresses = rows.map((row: any) => row.mail);
-
-			emailService.sendEmail({
-				to: emailAddresses,
-				subject: 'Test email',
-				htmlBody: '<h1>Test email</h1>',
-			});
+			if (upcomingGames?.length === 0) {
+				console.log('No games starting in 24 hours.');
+				return;
+			}
+			for (const game of upcomingGames) {
+				for (const email of emailAddresses) {
+					emailService.sendEmail({
+						to: email.email,
+						subject: `Penca UCU - Upcoming game: ${game.stage}`,
+						htmlBody: `
+						<h1>Upcoming game: ${game.stage}</h1>
+						<br/>
+						<p>First match date: ${game.first_match_date}</p>
+						`,
+					});
+				}
+			}
 		} catch (error: any) {
-			console.log(error);
+			console.error(error);
 		}
 	}
 }
