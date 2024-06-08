@@ -4,9 +4,11 @@ import { Request, Response } from 'express';
 export const getGames = async (req: Request, res: Response) => {
 	try {
 		const query = `
-            SELECT *
-            FROM game
-						ORDER BY date;
+            SELECT g.*, tl.teamCode as teamLocaleCode, tv.teamCode as teamVisitorCode
+      FROM game g
+      JOIN team tl ON g.team_id_local = tl.team_id
+      JOIN team tv ON g.team_id_visitor = tv.team_id
+      ORDER BY g.date;
         `;
 		const [games] = await pool.query(query);
 

@@ -12,12 +12,13 @@ import { ApiService } from '../../../core/services/api.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { EventEmitter } from 'stream';
+import { FlagService } from '../../../core/services/flag.service';
 
 @Component({
   selector: 'app-match-list',
   standalone: true,
   imports: [CommonModule, ToastModule],
-  providers: [DynamicDialogModule, DialogService, ApiService, MessageService],
+  providers: [DynamicDialogModule, DialogService, ApiService, MessageService, FlagService],
   templateUrl: './match-list.component.html',
   styleUrl: './match-list.component.scss',
 })
@@ -29,6 +30,7 @@ export class MatchListComponent {
   dialogService: DialogService = inject(DialogService);
   apiService: ApiService = inject(ApiService);
   messageService: MessageService = inject(MessageService);
+  flagService: FlagService = inject(FlagService);
 
   predictionRedDialog: DynamicDialogRef | undefined;
   updateGameDialog: DynamicDialogRef | undefined;
@@ -122,5 +124,9 @@ export class MatchListComponent {
 
   hasResults(game: IGame): boolean {
     return game.scoreLocale !== null && game.scoreVisitor !== null;
+  }
+
+  getFlagUrl(teamCode: string): string {
+    return this.flagService.getFlagUrl(teamCode);
   }
 }

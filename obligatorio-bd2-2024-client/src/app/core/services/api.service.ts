@@ -32,6 +32,8 @@ export class ApiService {
             scoreLocale: game.local_result,
             scoreVisitor: game.visitor_result,
             stage: game.stage,
+            teamLocaleCode: game.teamLocaleCode,
+            teamVisitorCode: game.teamVisitorCode
           };
         });
         return games;
