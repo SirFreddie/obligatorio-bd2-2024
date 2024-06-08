@@ -5,4 +5,6 @@ export interface IGame {
   scoreLocale: number;
   scoreVisitor: number;
   stage: string;
+  teamLocaleCode: string;
+  teamVisitorCode: string;
 }
