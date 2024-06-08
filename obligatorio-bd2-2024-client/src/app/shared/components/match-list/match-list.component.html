@@ -4,21 +4,23 @@
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div>{{ game.teamLocale }}</div>
         <div>{{ game.scoreLocale !== null ? game.scoreLocale : '-' }}</div>
-        <div *ngIf="canPredict">
-          <button
-            class="btn btn-success"
-            [disabled]="!checkIfCanPredict(game)"
-            (click)="createPrediction(game)">
-            Predict
-          </button>
-        </div>
-        <div *ngIf="canEdit">
-          <button
-            class="btn btn-primary"
-            [disabled]="checkIfCanEdit(game)"
-            (click)="updateGame(game)">
-            Edit
-          </button>
+        <div class="d-flex gap-2">
+          <div *ngIf="canPredict">
+            <button
+              class="btn btn-success"
+              [disabled]="!checkIfCanPredict(game)"
+              (click)="createPrediction(game)">
+              Predict
+            </button>
+          </div>
+          <div *ngIf="canEdit">
+            <button
+              class="btn btn-primary"
+              [disabled]="checkIfCanEdit(game)"
+              (click)="updateGame(game)">
+              Edit
+            </button>
+          </div>
         </div>
         <div>{{ game.scoreVisitor !== null ? game.scoreVisitor : '-' }}</div>
         <div>{{ game.teamVisitor }}</div>
