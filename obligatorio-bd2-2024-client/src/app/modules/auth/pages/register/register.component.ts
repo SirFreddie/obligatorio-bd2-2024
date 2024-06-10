@@ -67,7 +67,7 @@ export default class RegisterComponent implements OnInit{
       campeon: this.formulario.value.campeon,
       subcampeon: this.formulario.value.subcampeon
     };
-      this.registroService.registrarUsuario(usuario).toPromise().then(() => {
+      this.registroService.createUser(usuario).toPromise().then(() => {
         console.log('Usuario registrado');
         this.limpiar();
         

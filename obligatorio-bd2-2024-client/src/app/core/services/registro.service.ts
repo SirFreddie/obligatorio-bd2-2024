@@ -8,12 +8,13 @@ import { IUser } from '../models/interfaces/IUser.interface';
 })
 export class RegistroService {
 
-  private apiUrl = 'http://localhost:3000/usuarios';
+  private apiUrl = 'http://localhost:3000/api';
 
 
   constructor(private http: HttpClient) { }
 
-  registrarUsuario(usuario: IUser){
-    return this.http.post(this.apiUrl, usuario);
+  createUser(user: IUser): Observable<IUser> {
+    
+    return this.http.post<IUser>(`${this.apiUrl}/users/new`, user);
   }
 }
