@@ -9,7 +9,7 @@
                                 <div class="center-wrap">
                                     <div class="section text-center">
                                         <h4 class="mb-4 pb-3">Registrarse</h4>
-                                        <form novalidate [formGroup]="formulario" >
+                                        <form novalidate [formGroup]="formulario">
                                             <div class="form-group">
                                                 <input type="text" formControlName="nombre" class="form-style"
                                                     placeholder="Ingresa tu nombre" id="logname" autocomplete="off">
@@ -17,7 +17,8 @@
                                             </div>
                                             <div class="form-group mt-2">
                                                 <input type="text" formControlName="apellido" class="form-style"
-                                                    placeholder="Ingresa tu apellido" id="logapellido" autocomplete="off">
+                                                    placeholder="Ingresa tu apellido" id="logapellido"
+                                                    autocomplete="off">
                                                 <i class="input-icon uil uil-user"></i>
                                             </div>
                                             <div class="form-group mt-2">
@@ -26,8 +27,8 @@
                                                 <i class="input-icon uil uil-user"></i>
                                             </div>
                                             <div class="form-group mt-2">
-                                                <input type="email" formControlName="email" class="form-style" placeholder="Email"
-                                                    id="logemail" autocomplete="off">
+                                                <input type="email" formControlName="email" class="form-style"
+                                                    placeholder="Email" id="logemail" autocomplete="off">
                                                 <i class="input-icon uil uil-at"></i>
                                             </div>
                                             <div class="form-group mt-2">
@@ -36,19 +37,29 @@
                                                 <i class="input-icon uil uil-lock-alt"></i>
                                             </div>
                                             <div class="form-group mt-2">
-                                                <input type="text" formControlName="campeon" class="form-style"
-                                                    placeholder="Campeón" id="logpcampeon" autocomplete="off">
-                                                <i class="input-icon uil uil-lock-alt"></i>
+                                                <select class="form-select" formControlName="campeon"
+                                                (change)="updateSecondCountryOptions()">
+                                                    <option value="" selected>-</option>
+                                                    <option *ngFor="let country of firstCountryOptions"
+                                                        [value]="country.team_id">
+                                                        {{ country.name }}
+                                                    </option>
+                                                </select>
                                             </div>
                                             <div class="form-group mt-2">
-                                                <input type="text" formControlName="subcampeon" class="form-style"
-                                                    placeholder="Sub Campeón" id="logsubcampeon" autocomplete="off">
-                                                <i class="input-icon uil uil-lock-alt"></i>
+                                                <select class="form-select" formControlName="subcampeon"
+                                                (change)="updateFirstCountryOptions()">
+                                                    <option value="" selected>-</option>
+                                                    <option *ngFor="let country of secondCountryOptions"
+                                                        [value]="country.team_id">
+                                                        {{ country.name }}
+                                                    </option>
+                                                </select>
                                             </div>
                                             <button (click)="onSubmit()" class="btn mt-4">Registrarse</button>
-                                        
+
                                         </form>
-                                        
+
                                     </div>
                                 </div>
                             </div>
