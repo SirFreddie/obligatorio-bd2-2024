@@ -1,18 +1,38 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { Component, OnInit, inject } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { RegistroService } from '../../../../core/services/registro.service';
 import { IUser } from '../../../../core/models/interfaces/IUser.interface';
+import { ApiService } from '../../../../core/services/api.service';
+import { ITeam } from '../../../../core/models/interfaces/ITeam.interface';
+import { NgFor,NgForOf } from '@angular/common';
+import { MatchListComponent } from '../../../../shared/components/match-list/match-list.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ FormsModule, ReactiveFormsModule],
+  imports: [ 
+    FormsModule,
+    ReactiveFormsModule,NgFor,NgForOf,MatchListComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
-export default class RegisterComponent {
+export default class RegisterComponent implements OnInit{
 
+  apiService: ApiService = inject(ApiService);
+
+  countries: ITeam[] = [];
+  firstCountryOptions: ITeam[] = [...this.countries];
+  secondCountryOptions: ITeam[] = [...this.countries];
   formulario: FormGroup;
+  fb = inject(FormBuilder);
+
+  createMatchForm = this.fb.group({
+    campeon: ['', [Validators.required]],
+    subcampeon: ['', [Validators.required]],
+  });
+
+  
+
   constructor(private registroService: RegistroService) { 
 
     this.formulario = new FormGroup({
@@ -23,6 +43,15 @@ export default class RegisterComponent {
       password: new FormControl(),
       campeon: new FormControl(),
       subcampeon: new FormControl()
+    });
+  }
+  ngOnInit(): void {
+    this.apiService.getTeams().subscribe({
+      next: teams => {
+        this.countries = teams;
+        this.firstCountryOptions = [...this.countries];
+        this.secondCountryOptions = [...this.countries];
+      },
     });
   }
 
@@ -50,6 +79,23 @@ export default class RegisterComponent {
   limpiar() {
     this.formulario?.reset();
 
+  }
+  updateSecondCountryOptions(): void {
+    const firstCountryValue = this.createMatchForm.get('subcampeon')?.value;
+    if (firstCountryValue) {
+      this.secondCountryOptions = this.countries.filter(
+        country => country.team_id !== firstCountryValue
+      );
+    }
+  }
+
+  updateFirstCountryOptions(): void {
+    const secondCountryValue = this.createMatchForm.get('campeon')?.value;
+    if (secondCountryValue) {
+      this.firstCountryOptions = this.countries.filter(
+        country => country.team_id !== secondCountryValue
+      );
+    }
   }
 
 }
