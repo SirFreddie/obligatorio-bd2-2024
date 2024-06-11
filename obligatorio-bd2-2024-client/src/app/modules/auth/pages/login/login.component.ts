@@ -9,21 +9,12 @@ import { AuthService } from '../../../../core/services/auth.service';
   styleUrl: './login.component.scss',
 })
 export default class LoginComponent {
-  constructor(private auth:AuthService) {}
+  constructor(private auth: AuthService) {}
 
-  email: string= '' ;
-  password: string= '' ;
+  email: string = '';
+  password: string = '';
 
-  login(){
-    const user = {email: this.email, password: this.password};
-    this.auth.login(user.email,user.password).subscribe((res) => {
-      console.log(res);
-    });
+  login() {
+    const user = { email: this.email, password: this.password };
   }
-
-
-
-
-
-
 }
