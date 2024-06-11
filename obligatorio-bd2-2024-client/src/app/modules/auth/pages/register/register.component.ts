@@ -1,23 +1,36 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { RegistroService } from '../../../../core/services/registro.service';
-import { IUser } from '../../../../core/models/interfaces/IUser.interface';
+import {
+  IStudent,
+  IUser,
+} from '../../../../core/models/interfaces/IUser.interface';
 import { ApiService } from '../../../../core/services/api.service';
 import { ITeam } from '../../../../core/models/interfaces/ITeam.interface';
-import { NgFor,NgForOf } from '@angular/common';
+import { NgFor, NgForOf } from '@angular/common';
 import { MatchListComponent } from '../../../../shared/components/match-list/match-list.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ 
+  imports: [
     FormsModule,
-    ReactiveFormsModule,NgFor,NgForOf,MatchListComponent],
+    ReactiveFormsModule,
+    NgFor,
+    NgForOf,
+    MatchListComponent,
+  ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
-export default class RegisterComponent implements OnInit{
-
+export default class RegisterComponent implements OnInit {
   apiService: ApiService = inject(ApiService);
 
   countries: ITeam[] = [];
@@ -31,18 +44,15 @@ export default class RegisterComponent implements OnInit{
     subcampeon: ['', [Validators.required]],
   });
 
-  
-
-  constructor(private registroService: RegistroService) { 
-
+  constructor(private registroService: RegistroService) {
     this.formulario = new FormGroup({
-      nombre: new FormControl(),
-      apellido: new FormControl(),
-      cedula: new FormControl(),
+      user_id: new FormControl(),
+      name: new FormControl(),
+      surname: new FormControl(),
       email: new FormControl(),
       password: new FormControl(),
-      campeon: new FormControl(),
-      subcampeon: new FormControl()
+      first_place_prediction: new FormControl(),
+      second_place_prediction: new FormControl(),
     });
   }
   ngOnInit(): void {
@@ -57,29 +67,30 @@ export default class RegisterComponent implements OnInit{
 
   onSubmit() {
     if (this.formulario?.valid) {
-
-    const usuario:IUser = {
-      nombre: this.formulario.value.nombre,
-      apellido: this.formulario.value.apellido,
-      cedula: this.formulario.value.cedula,
-      email: this.formulario.value.email,
-      password: this.formulario.value.password,
-      campeon: this.formulario.value.campeon,
-      subcampeon: this.formulario.value.subcampeon
-    };
-      this.registroService.createUser(usuario).toPromise().then(() => {
-        console.log('Usuario registrado');
-        this.limpiar();
-        
-      }).catch((error) => {
-        console.error('Error al registrar usuario', error);
+      const usuario: IStudent = {
+        user_id: this.formulario.value.user_id,
+        name: this.formulario.value.name,
+        surname: this.formulario.value.surname,
+        email: this.formulario.value.email,
+        password: this.formulario.value.password,
+        first_place_prediction: this.formulario.value.first_place_prediction,
+        second_place_prediction: this.formulario.value.second_place_prediction,
+      };
+      this.registroService.createUser(usuario).subscribe({
+        next: user => {
+          this.limpiar();
+        },
+        error: error => {
+          console.log('Error al crear usuario', error);
+        },
       });
     }
   }
+
   limpiar() {
     this.formulario?.reset();
-
   }
+
   updateSecondCountryOptions(): void {
     const firstCountryValue = this.createMatchForm.get('subcampeon')?.value;
     if (firstCountryValue) {
@@ -97,5 +108,4 @@ export default class RegisterComponent implements OnInit{
       );
     }
   }
-
 }

@@ -124,7 +124,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
 		const token = await generateJWT(user.user_id.toString(), role);
 
-		delete user.password
+		delete user.password;
 
 		return res.status(200).json({
 			ok: true,
@@ -144,23 +144,22 @@ export const loginUser = async (req: Request, res: Response) => {
 };
 
 export const isValidToken = async (req: Request, res: Response) => {
-    const token = req.header('Authorization');
+	const token = req.header('Authorization');
 
-    if (!token) {
-        return res.status(401).json({
-            msg: 'No token provided'
-        });
-    }
+	if (!token) {
+		return res.status(401).json({
+			msg: 'No token provided',
+		});
+	}
 
-    try {
-        jwt.verify(token, process.env.SECRETKEY || '');
+	try {
+		jwt.verify(token, process.env.SECRETKEY || '');
 
-        res.status(200).send(true);
-
-    } catch (error) {
-        console.error(error);
-        res.status(401).json({
-            msg: "Invalid token"
-        });
-    }
+		res.status(200).send(true);
+	} catch (error) {
+		console.error(error);
+		res.status(401).json({
+			msg: 'Invalid token',
+		});
+	}
 };
