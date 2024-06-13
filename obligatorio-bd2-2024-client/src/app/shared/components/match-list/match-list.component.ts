@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output, inject } from '@angular/core';
+import { Component, Input, OnInit, Output, inject } from '@angular/core';
 import { IGame } from '../../../core/models/interfaces/IGame.interface';
 import {
   DialogService,
@@ -13,27 +13,44 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { EventEmitter } from 'stream';
 import { FlagService } from '../../../core/services/flag.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-match-list',
   standalone: true,
   imports: [CommonModule, ToastModule],
-  providers: [DynamicDialogModule, DialogService, ApiService, MessageService, FlagService],
+  providers: [
+    DynamicDialogModule,
+    DialogService,
+    ApiService,
+    MessageService,
+    FlagService,
+  ],
   templateUrl: './match-list.component.html',
   styleUrl: './match-list.component.scss',
 })
-export class MatchListComponent {
+export class MatchListComponent implements OnInit {
   @Input() games: IGame[] = [];
-  @Input() canEdit: boolean = false;
-  @Input() canPredict: boolean = false;
+  predictions: IPrediction[] = [];
 
   dialogService: DialogService = inject(DialogService);
   apiService: ApiService = inject(ApiService);
   messageService: MessageService = inject(MessageService);
   flagService: FlagService = inject(FlagService);
+  authService: AuthService = inject(AuthService);
 
   predictionRedDialog: DynamicDialogRef | undefined;
   updateGameDialog: DynamicDialogRef | undefined;
+
+  ngOnInit(): void {
+    if (this.authService.activeUser && this.authService.isStudent) {
+      this.apiService
+        .getUserPredictions(this.authService.activeUser?.user_id)
+        .subscribe({
+          next: predictions => (this.predictions = predictions),
+        });
+    }
+  }
 
   createPrediction(game: IGame): void {
     this.predictionRedDialog = this.dialogService.open(
@@ -114,12 +131,14 @@ export class MatchListComponent {
 
     // Return true if the current date is before the cutoff time, the game has no results, and the user can predict
     return (
-      currentDate < cutoffTime && !this.hasResults(game) && this.canPredict
+      currentDate < cutoffTime &&
+      !this.hasResults(game) &&
+      this.authService.isStudent
     );
   }
 
   checkIfCanEdit(game: IGame): boolean {
-    return this.hasResults(game) && this.canEdit;
+    return this.hasResults(game) && this.authService.isAdmin;
   }
 
   hasResults(game: IGame): boolean {
@@ -128,5 +147,26 @@ export class MatchListComponent {
 
   getFlagUrl(teamCode: string): string {
     return this.flagService.getFlagUrl(teamCode);
+  }
+
+  getPrediction(game: IGame): IPrediction | undefined {
+    return this.predictions.find(
+      p =>
+        p.stage === game.stage &&
+        p.team_id_local === game.teamLocale &&
+        p.team_id_visitor === game.teamVisitor
+    );
+  }
+
+  getPredictionColor(score: number, prediction: number): string {
+    if (score === null || prediction === null) {
+      return 'text-warning-emphasis';
+    } else if (score === prediction) {
+      return 'text-success-emphasis';
+    } else if (score !== prediction) {
+      return 'text-danger-emphasis';
+    } else {
+      return 'text-warning-emphasis';
+    }
   }
 }

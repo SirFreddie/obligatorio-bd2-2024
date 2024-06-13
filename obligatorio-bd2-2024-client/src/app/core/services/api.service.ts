@@ -33,7 +33,7 @@ export class ApiService {
             scoreVisitor: game.visitor_result,
             stage: game.stage,
             teamLocaleCode: game.teamLocaleCode,
-            teamVisitorCode: game.teamVisitorCode
+            teamVisitorCode: game.teamVisitorCode,
           };
         });
         return games;
@@ -69,5 +69,11 @@ export class ApiService {
 
   createPrediction(prediction: IPrediction): Observable<any> {
     return this.http.post(`${this.baseUrl}/predictions/new`, prediction);
+  }
+
+  getUserPredictions(userId: number): Observable<IPrediction[]> {
+    return this.http
+      .get(`${this.baseUrl}/predictions/${userId}`)
+      .pipe(map((res: any) => res.data));
   }
 }

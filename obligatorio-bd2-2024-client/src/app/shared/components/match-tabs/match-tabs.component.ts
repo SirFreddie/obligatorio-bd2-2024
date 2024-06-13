@@ -1,11 +1,4 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  computed,
-  model,
-  signal,
-} from '@angular/core';
+import { Component, computed, model } from '@angular/core';
 import { IGame } from '../../../core/models/interfaces/IGame.interface';
 import { STAGES } from '../../helpers/constants';
 import { TabViewModule } from 'primeng/tabview';

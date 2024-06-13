@@ -1,10 +1,7 @@
 <p-tabView>
   @for (stage of stages; track $index) {
     <p-tabPanel [header]="stage" [disabled]="!getGamesByStage(stage).length">
-      <app-match-list
-        [games]="getGamesByStage(stage)"
-        [canEdit]="true"
-        [canPredict]="true"></app-match-list>
+      <app-match-list [games]="getGamesByStage(stage)"></app-match-list>
     </p-tabPanel>
   }
 </p-tabView>

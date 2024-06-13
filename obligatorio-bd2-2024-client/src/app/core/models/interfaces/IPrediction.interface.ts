@@ -4,4 +4,5 @@ export interface IPrediction {
   team_id_visitor: string;
   visitor_result: number;
   stage: string;
+  points: number;
 }

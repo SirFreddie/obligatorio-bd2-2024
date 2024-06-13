@@ -1,5 +1,6 @@
 import { pool } from '../db/config';
 import { Request, Response } from 'express';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
 export const getPredictions = async (req: Request, res: Response) => {
 	try {
@@ -23,6 +24,14 @@ export const getPredictions = async (req: Request, res: Response) => {
 };
 
 export const createPrediction = async (req: Request, res: Response) => {
+	const token = req.header('Authorization');
+	if (!token) {
+		return res.status(401).json({
+			ok: false,
+			message: 'No token provided.',
+		});
+	}
+	const { uid } = jwt.decode(token) as JwtPayload;
 	try {
 		const prediction: {
 			team_id_local: string;
@@ -39,7 +48,7 @@ export const createPrediction = async (req: Request, res: Response) => {
 		const values = [
 			prediction.local_result,
 			prediction.visitor_result,
-			48513221,
+			uid,
 			prediction.team_id_local,
 			prediction.team_id_visitor,
 			prediction.stage,
@@ -65,6 +74,30 @@ export const createPrediction = async (req: Request, res: Response) => {
 				message: error.sqlMessage,
 			});
 		}
+		return res.status(500).json({
+			ok: false,
+			message: 'Internal server error.',
+		});
+	}
+};
+
+export const getStudentPredictions = async (req: Request, res: Response) => {
+	try {
+		const { studentId } = req.params;
+
+		const query = `
+						SELECT *
+						FROM prediction
+						WHERE student_id = ?;
+				`;
+		const [prediction] = await pool.query(query, [studentId]);
+
+		return res.status(200).json({
+			ok: true,
+			data: prediction,
+		});
+	} catch (error: any) {
+		console.log(error);
 		return res.status(500).json({
 			ok: false,
 			message: 'Internal server error.',
