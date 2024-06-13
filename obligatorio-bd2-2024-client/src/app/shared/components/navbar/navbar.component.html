@@ -11,25 +11,57 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse d-lg-flex">
-      <a class="navbar-brand col-lg-3 me-0" routerLink="/home">Penca UCU</a>
+    <div class="collapse navbar-collapse d-lg-flex align-items-center">
+      <a class="navbar-brand col-lg-3 me-0" routerLink="/home">
+        <img
+          class="ucu-logo"
+          src="https://www.ucu.edu.uy/plantillas/images/logo_ucu.svg"
+          alt="Universidad Católica del Uruguay"
+          title="Universidad Católica del Uruguay" />
+      </a>
       <div class="navbar-nav col-lg-6 justify-content-lg-center">
-        <a class="nav-link" routerLink="/home">Fixture</a>
-        <a class="nav-link" routerLink="home/leaderboard">Leaderboard</a>
-        <a class="nav-link" routerLink="/admin">Dashboard</a>
+        <a
+          class="nav-link"
+          routerLinkActive="fw-bolder"
+          routerLink="/home/fixture"
+          >Fixture</a
+        >
+        <a
+          class="nav-link"
+          routerLinkActive="fw-bolder"
+          routerLink="home/leaderboard"
+          >Leaderboard</a
+        >
+
+        <a
+          *ngIf="authService.isAdmin"
+          class="nav-link"
+          routerLinkActive="fw-bolder"
+          routerLink="/admin"
+          >Dashboard</a
+        >
       </div>
-      <div class="d-lg-flex col-lg-3 justify-content-lg-end">
+      <div class="d-lg-flex col-lg-3 justify-content-lg-end gap-2">
         <button
+          *ngIf="!authService.activeUser"
           type="button"
-          class="btn btn-outline-primary me-2"
+          class="btn btn-outline-primary"
           routerLink="/auth/login">
           Login
         </button>
         <button
+          *ngIf="!authService.activeUser"
           type="button"
           class="btn btn-success"
           routerLink="/auth/register">
-          Sign-up
+          Register
+        </button>
+        <button
+          *ngIf="authService.activeUser"
+          type="button"
+          class="btn btn-outline-warning"
+          (click)="logout()">
+          Logout
         </button>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { pool } from '../db/config';
 import { Request, Response } from 'express';
 import bcryptjs from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import generateJWT from '../helpers/generate-jwt';
 
 export const createUser = async (req: Request, res: Response) => {
@@ -49,7 +49,7 @@ export const createUser = async (req: Request, res: Response) => {
 			data: user,
 		});
 	} catch (error: any) {
-		console.log(error);
+		console.error(error);
 		if (error.code === 'ER_DUP_ENTRY') {
 			return res.status(409).json({
 				ok: false,
@@ -78,7 +78,7 @@ export const getPoints = async (req: Request, res: Response) => {
 			data: rows,
 		});
 	} catch (error: any) {
-		console.log(error);
+		console.error(error);
 		return res.status(500).json({
 			ok: false,
 			message: 'Internal server error',
@@ -122,9 +122,10 @@ export const loginUser = async (req: Request, res: Response) => {
 			role = 'admin';
 		}
 
-		const token = await generateJWT(user.user_id.toString(), role);
+		const token = await generateJWT(user.user_id.toString());
 
 		delete user.password;
+		user.role = role;
 
 		return res.status(200).json({
 			ok: true,
@@ -135,7 +136,7 @@ export const loginUser = async (req: Request, res: Response) => {
 			},
 		});
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		return res.status(500).json({
 			ok: false,
 			message: 'Internal server error',
@@ -143,23 +144,58 @@ export const loginUser = async (req: Request, res: Response) => {
 	}
 };
 
-export const isValidToken = async (req: Request, res: Response) => {
+export const renewToken = async (req: Request, res: Response) => {
 	const token = req.header('Authorization');
 
 	if (!token) {
-		return res.status(401).json({
-			msg: 'No token provided',
+		return res.status(400).json({
+			errors: [{ msg: 'No token.' }],
 		});
 	}
 
-	try {
-		jwt.verify(token, process.env.SECRETKEY || '');
+	const { uid } = jwt.decode(token) as JwtPayload;
 
-		res.status(200).send(true);
+	try {
+		const newToken = await generateJWT(uid);
+
+		const userQuery = `
+						SELECT * FROM user WHERE user_id = ?;
+				`;
+		const [userResponse]: any = await pool.query(userQuery, [uid]);
+
+		if (userResponse.length === 0) {
+			return res.status(404).json({
+				errors: [{ msg: 'User not found.' }],
+			});
+		}
+
+		const user = userResponse[0];
+
+		let role = 'student';
+
+		const adminQuery = `
+            SELECT * FROM admin WHERE admin_id = ?;
+		`;
+		const [adminResponse]: any = await pool.query(adminQuery, [user.user_id]);
+
+		if (adminResponse.length > 0) {
+			role = 'admin';
+		}
+
+		delete user.password;
+		user.role = role;
+
+		return res.status(200).json({
+			ok: true,
+			data: {
+				user,
+				token: newToken,
+			},
+		});
 	} catch (error) {
 		console.error(error);
-		res.status(401).json({
-			msg: 'Invalid token',
+		return res.status(500).json({
+			errors: [{ msg: 'Internal server error.' }],
 		});
 	}
 };

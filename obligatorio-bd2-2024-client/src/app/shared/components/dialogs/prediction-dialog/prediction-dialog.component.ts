@@ -45,6 +45,7 @@ export class PredictionDialogComponent {
       team_id_visitor: this.game.teamVisitor,
       visitor_result: this.visitorResult.value,
       stage: this.game.stage,
+      points: 0,
     };
     this.ref.close(newPrediction);
     return;
