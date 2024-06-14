@@ -36,6 +36,7 @@ export default class RegisterComponent implements OnInit {
   countries: ITeam[] = [];
   firstCountryOptions: ITeam[] = [...this.countries];
   secondCountryOptions: ITeam[] = [...this.countries];
+  careers: any[] = [];
   formulario: FormGroup;
   fb = inject(FormBuilder);
 
@@ -51,8 +52,9 @@ export default class RegisterComponent implements OnInit {
       surname: new FormControl(),
       email: new FormControl(),
       password: new FormControl(),
-      first_place_prediction: new FormControl(),
-      second_place_prediction: new FormControl(),
+      career: new FormControl(''),
+      first_place_prediction: new FormControl(''),
+      second_place_prediction: new FormControl(''),
     });
   }
   ngOnInit(): void {
@@ -63,6 +65,12 @@ export default class RegisterComponent implements OnInit {
         this.secondCountryOptions = [...this.countries];
       },
     });
+
+    this.apiService.getCareers().subscribe({
+      next: careers => {
+        this.careers = careers;
+      }
+    })
   }
 
   onSubmit() {
@@ -73,6 +81,7 @@ export default class RegisterComponent implements OnInit {
         surname: this.formulario.value.surname,
         email: this.formulario.value.email,
         password: this.formulario.value.password,
+        career: this.formulario.value.career,
         first_place_prediction: this.formulario.value.first_place_prediction,
         second_place_prediction: this.formulario.value.second_place_prediction,
       };
@@ -108,4 +117,6 @@ export default class RegisterComponent implements OnInit {
       );
     }
   }
+
+
 }

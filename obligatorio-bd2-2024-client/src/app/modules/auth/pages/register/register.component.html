@@ -61,12 +61,22 @@
                         <i class="input-icon uil uil-lock-alt"></i>
                       </div>
                       <div class="form-group mt-2">
-                        <label for="">Elegir Campeon</label>
+                        <select formControlName="career" class="form-style">
+                            <option value="" disabled selected>Carrera</option>
+                            <option
+                            *ngFor="let career of careers"
+                            [value]="career.career_id">
+                            {{ career.name }}
+                          </option>
+                        </select>
+                        <i class="input-icon uil uil-lock-alt"></i>
+                    </div>
+                      <div class="form-group mt-2">
                         <select
-                          class="form-select"
+                          class="form-style"
                           formControlName="first_place_prediction"
                           (change)="updateSecondCountryOptions()">
-                          <option value="" selected>-</option>
+                          <option value="" disabled selected>Elegir Campeon</option>
                           <option
                             *ngFor="let country of firstCountryOptions"
                             [value]="country.team_id">
@@ -75,12 +85,11 @@
                         </select>
                       </div>
                       <div class="form-group mt-2">
-                        <label for="">Elegir Sub-Campeon</label>
                         <select
-                          class="form-select"
+                          class="form-style"
                           formControlName="second_place_prediction"
                           (change)="updateFirstCountryOptions()">
-                          <option value="" selected>-</option>
+                          <option value="" disabled selected>Elegir Sub-Campeon</option>
                           <option
                             *ngFor="let country of secondCountryOptions"
                             [value]="country.team_id">

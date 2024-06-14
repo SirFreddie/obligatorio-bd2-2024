@@ -9,6 +9,7 @@ export interface IUser {
 
 export interface IStudent extends IUser {
   points?: number;
+  career: number;
   first_place_prediction: string;
   second_place_prediction: string;
 }
