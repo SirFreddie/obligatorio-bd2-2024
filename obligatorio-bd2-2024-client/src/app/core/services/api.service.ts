@@ -76,4 +76,9 @@ export class ApiService {
       .get(`${this.baseUrl}/predictions/${userId}`)
       .pipe(map((res: any) => res.data));
   }
+
+  getCareers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/careers`)
+    .pipe(map((res: any) => res.data));;
+  }
 }

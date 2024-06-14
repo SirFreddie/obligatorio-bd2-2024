@@ -12,6 +12,7 @@ export const createUser = async (req: Request, res: Response) => {
 			surname: string;
 			email: string;
 			password: string;
+			career: number,
 			first_place_prediction: string;
 			second_place_prediction: string;
 		} = req.body;
@@ -42,6 +43,16 @@ export const createUser = async (req: Request, res: Response) => {
 			user.second_place_prediction,
 		];
 		await pool.query(studentQuery, studentValues);
+
+		const careerQuery = `
+                INSERT INTO student_career (career_id, student_id)
+                VALUES (?, ?);
+            `;
+		const careerValues = [
+			user.career,
+			user.user_id
+		];
+		await pool.query(careerQuery, careerValues);
 
 		return res.status(200).json({
 			ok: true,
