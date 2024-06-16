@@ -104,3 +104,50 @@ export const getStudentPredictions = async (req: Request, res: Response) => {
 		});
 	}
 };
+
+export const updatePrediction = async (req: Request, res: Response) => {
+	const token = req.header('Authorization');
+	if (!token) {
+		return res.status(401).json({
+			ok: false,
+			message: 'No token provided.',
+		});
+	}
+	const { uid } = jwt.decode(token) as JwtPayload;
+	try {
+		const {
+			stage,
+			local_result,
+			visitor_result,
+			team_id_local,
+			team_id_visitor,
+		} = req.body;
+
+		const query = `
+						UPDATE prediction
+						SET local_result = ?, visitor_result = ?
+						WHERE student_id = ? AND team_id_local = ? AND team_id_visitor = ? AND stage = ?;
+				`;
+		const values = [
+			local_result,
+			visitor_result,
+			uid,
+			team_id_local,
+			team_id_visitor,
+			stage,
+		];
+		const response = await pool.query(query, values);
+
+		return res.status(200).json({
+			ok: true,
+			message: 'Prediction updated.',
+			data: response[0],
+		});
+	} catch (error: any) {
+		console.log(error);
+		return res.status(500).json({
+			ok: false,
+			message: 'Internal server error.',
+		});
+	}
+};

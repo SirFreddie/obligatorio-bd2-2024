@@ -43,7 +43,7 @@
               *ngIf="checkIfCanPredict(game) && getPrediction(game)"
               class="btn btn-primary"
               [disabled]="!checkIfCanPredict(game)"
-              (click)="createPrediction(game)">
+              (click)="updatePrediction(game)">
               Edit Prediction
             </button>
             <span *ngIf="hasResults(game) && getPrediction(game)"

@@ -39,7 +39,8 @@ export class MatchListComponent implements OnInit {
   flagService: FlagService = inject(FlagService);
   authService: AuthService = inject(AuthService);
 
-  predictionRedDialog: DynamicDialogRef | undefined;
+  createPredictionRefDialog: DynamicDialogRef | undefined;
+  updatePredictionRefDialog: DynamicDialogRef | undefined;
   updateGameDialog: DynamicDialogRef | undefined;
 
   ngOnInit(): void {
@@ -53,7 +54,7 @@ export class MatchListComponent implements OnInit {
   }
 
   createPrediction(game: IGame): void {
-    this.predictionRedDialog = this.dialogService.open(
+    this.createPredictionRefDialog = this.dialogService.open(
       PredictionDialogComponent,
       {
         header: 'Prediction',
@@ -61,7 +62,7 @@ export class MatchListComponent implements OnInit {
       }
     );
 
-    this.predictionRedDialog.onClose.subscribe({
+    this.createPredictionRefDialog.onClose.subscribe({
       next: (prediction: IPrediction) => {
         if (prediction) {
           this.apiService.createPrediction(prediction).subscribe({
@@ -70,6 +71,41 @@ export class MatchListComponent implements OnInit {
                 severity: 'success',
                 summary: 'Confirmed',
                 detail: 'Prediction done!.',
+                life: 3000,
+              });
+            },
+            error: err => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: err.error.message,
+                life: 3000,
+              });
+            },
+          });
+        }
+      },
+    });
+  }
+
+  updatePrediction(game: IGame) {
+    this.updatePredictionRefDialog = this.dialogService.open(
+      PredictionDialogComponent,
+      {
+        header: 'Prediction',
+        data: game,
+      }
+    );
+
+    this.updatePredictionRefDialog.onClose.subscribe({
+      next: (prediction: IPrediction) => {
+        if (prediction) {
+          this.apiService.updatePrediction(prediction).subscribe({
+            next: () => {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Confirmed',
+                detail: 'Prediction updated!.',
                 life: 3000,
               });
             },
