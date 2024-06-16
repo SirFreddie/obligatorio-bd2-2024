@@ -5,14 +5,19 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import generateJWT from '../helpers/generate-jwt';
 
 export const createUser = async (req: Request, res: Response) => {
+	let connection;
 	try {
+		connection = await pool.getConnection();
+
+		await connection.beginTransaction();
+
 		const user: {
 			user_id: number;
 			name: string;
 			surname: string;
 			email: string;
 			password: string;
-			career: number,
+			career: number;
 			first_place_prediction: string;
 			second_place_prediction: string;
 		} = req.body;
@@ -31,7 +36,7 @@ export const createUser = async (req: Request, res: Response) => {
 			user.email,
 			user.password,
 		];
-		await pool.query(query, values);
+		await connection.query(query, values);
 
 		const studentQuery = `
                 INSERT INTO student (student_id, first_place_prediction, second_place_prediction)
@@ -42,17 +47,16 @@ export const createUser = async (req: Request, res: Response) => {
 			user.first_place_prediction,
 			user.second_place_prediction,
 		];
-		await pool.query(studentQuery, studentValues);
+		await connection.query(studentQuery, studentValues);
 
 		const careerQuery = `
                 INSERT INTO student_career (career_id, student_id)
                 VALUES (?, ?);
             `;
-		const careerValues = [
-			user.career,
-			user.user_id
-		];
-		await pool.query(careerQuery, careerValues);
+		const careerValues = [user.career, user.user_id];
+		await connection.query(careerQuery, careerValues);
+
+		await connection.commit();
 
 		return res.status(200).json({
 			ok: true,
@@ -60,6 +64,9 @@ export const createUser = async (req: Request, res: Response) => {
 			data: user,
 		});
 	} catch (error: any) {
+		if (connection) {
+			await connection.rollback();
+		}
 		console.error(error);
 		if (error.code === 'ER_DUP_ENTRY') {
 			return res.status(409).json({
@@ -71,6 +78,10 @@ export const createUser = async (req: Request, res: Response) => {
 			ok: false,
 			message: 'Internal server error',
 		});
+	} finally {
+		if (connection) {
+			await connection.release();
+		}
 	}
 };
 
