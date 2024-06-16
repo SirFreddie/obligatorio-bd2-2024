@@ -73,7 +73,11 @@ export const createGame = async (req: Request, res: Response) => {
 };
 
 export const updateGame = async (req: Request, res: Response) => {
+	let connection;
 	try {
+		connection = await pool.getConnection();
+		await connection.beginTransaction();
+
 		const game: {
 			stage: string;
 			team_id_local: string;
@@ -94,7 +98,7 @@ export const updateGame = async (req: Request, res: Response) => {
 			game.team_id_local,
 			game.team_id_visitor,
 		];
-		const response = await pool.query(updateGameQuery, updateGameValues);
+		await connection.query(updateGameQuery, updateGameValues);
 
 		const getPredictionsQuery = `
 						SELECT *
@@ -107,10 +111,10 @@ export const updateGame = async (req: Request, res: Response) => {
 			game.team_id_visitor,
 		];
 
-		const [predictions] = (await pool.query(
+		const [predictions] = await connection.query(
 			getPredictionsQuery,
 			getPredictionsValues
-		)) as any[];
+		);
 
 		const updatePredictionsQuery = `
 						UPDATE prediction
@@ -143,10 +147,10 @@ export const updateGame = async (req: Request, res: Response) => {
 						: game.team_id_visitor;
 
 				const getStudentsValues = [prediction.student_id];
-				const [student] = (await pool.query(
+				const [student] = await connection.query(
 					getStudentsQuery,
 					getStudentsValues
-				)) as any;
+				);
 
 				if (student[0].first_place_prediction === firtsPlaceTeam) {
 					points += 10;
@@ -174,20 +178,29 @@ export const updateGame = async (req: Request, res: Response) => {
 				game.team_id_local,
 				game.team_id_visitor,
 			];
-			await pool.query(updatePredictionsQuery, updatePredictionValues);
+			await connection.query(updatePredictionsQuery, updatePredictionValues);
 			const updateStudentValues = [points, prediction.student_id];
-			await pool.query(updateUsersQuery, updateStudentValues);
+			await connection.query(updateUsersQuery, updateStudentValues);
 		}
+
+		await connection.commit();
 
 		return res.status(200).json({
 			ok: true,
 			message: 'Game updated and predictions scored.',
 		});
 	} catch (error: any) {
+		if (connection) {
+			await connection.rollback();
+		}
 		console.error(error);
 		return res.status(500).json({
 			ok: false,
 			message: 'Internal server error.',
 		});
+	} finally {
+		if (connection) {
+			await connection.release();
+		}
 	}
 };
