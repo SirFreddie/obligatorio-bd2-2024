@@ -16,6 +16,8 @@ import { ApiService } from '../../../../core/services/api.service';
 import { ITeam } from '../../../../core/models/interfaces/ITeam.interface';
 import { NgFor, NgForOf } from '@angular/common';
 import { MatchListComponent } from '../../../../shared/components/match-list/match-list.component';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-register',
@@ -26,19 +28,22 @@ import { MatchListComponent } from '../../../../shared/components/match-list/mat
     NgFor,
     NgForOf,
     MatchListComponent,
+    ToastModule,
   ],
+  providers: [MessageService],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
 export default class RegisterComponent implements OnInit {
   apiService: ApiService = inject(ApiService);
+  fb = inject(FormBuilder);
+  messageService: MessageService = inject(MessageService);
 
   countries: ITeam[] = [];
   firstCountryOptions: ITeam[] = [...this.countries];
   secondCountryOptions: ITeam[] = [...this.countries];
   careers: any[] = [];
   formulario: FormGroup;
-  fb = inject(FormBuilder);
 
   createMatchForm = this.fb.group({
     campeon: ['', [Validators.required]],
@@ -88,9 +93,20 @@ export default class RegisterComponent implements OnInit {
       this.registroService.createUser(usuario).subscribe({
         next: user => {
           this.limpiar();
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Confirmed',
+            detail: 'Usuario creado correctamente.',
+            life: 3000,
+          });
         },
         error: error => {
-          console.log('Error al crear usuario', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.error.message,
+            life: 3000,
+          });
         },
       });
     }

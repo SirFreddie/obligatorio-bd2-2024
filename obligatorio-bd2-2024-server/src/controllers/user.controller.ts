@@ -12,7 +12,7 @@ export const createUser = async (req: Request, res: Response) => {
 			surname: string;
 			email: string;
 			password: string;
-			career: number,
+			career: number;
 			first_place_prediction: string;
 			second_place_prediction: string;
 		} = req.body;
@@ -48,10 +48,7 @@ export const createUser = async (req: Request, res: Response) => {
                 INSERT INTO student_career (career_id, student_id)
                 VALUES (?, ?);
             `;
-		const careerValues = [
-			user.career,
-			user.user_id
-		];
+		const careerValues = [user.career, user.user_id];
 		await pool.query(careerQuery, careerValues);
 
 		return res.status(200).json({
@@ -109,7 +106,7 @@ export const loginUser = async (req: Request, res: Response) => {
 		if (userResponse.length === 0) {
 			return res.status(404).json({
 				ok: false,
-				message: 'User not found',
+				message: 'Incorrect email or password.',
 			});
 		}
 
@@ -118,7 +115,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
 		if (!validPassword) {
 			return res.status(401).json({
-				msg: 'Password is not correct',
+				msg: 'Incorrect email or password.',
 			});
 		}
 

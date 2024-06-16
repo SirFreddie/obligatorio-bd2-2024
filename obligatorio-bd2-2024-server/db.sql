@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `penca_ucu`.`user` (
   `user_id` INT NOT NULL,
   `name` VARCHAR(45) NOT NULL,
   `surname` VARCHAR(45) NOT NULL,
-  `email` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(45) NOT NULL UNIQUE,
   `password` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`user_id`)
 );
