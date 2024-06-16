@@ -8,17 +8,21 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ToastModule],
+  providers: [MessageService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
 export default class LoginComponent implements OnInit {
   authService: AuthService = inject(AuthService);
   router: Router = inject(Router);
+  messageService: MessageService = inject(MessageService);
 
   loginForm!: FormGroup;
 
@@ -38,14 +42,18 @@ export default class LoginComponent implements OnInit {
       .subscribe(
         res => {
           if (res.ok) {
-            console.log('Login successful');
             this.router.navigate(['/home']);
           } else {
             console.log('Login failed');
           }
         },
         err => {
-          console.error(err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.error.message,
+            life: 3000,
+          });
         }
       );
   }

@@ -120,7 +120,7 @@ export const loginUser = async (req: Request, res: Response) => {
 		if (userResponse.length === 0) {
 			return res.status(404).json({
 				ok: false,
-				message: 'User not found',
+				message: 'Incorrect email or password.',
 			});
 		}
 
@@ -129,7 +129,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
 		if (!validPassword) {
 			return res.status(401).json({
-				msg: 'Password is not correct',
+				msg: 'Incorrect email or password.',
 			});
 		}
 
