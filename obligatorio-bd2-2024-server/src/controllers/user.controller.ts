@@ -71,7 +71,7 @@ export const createUser = async (req: Request, res: Response) => {
 		if (error.code === 'ER_DUP_ENTRY') {
 			return res.status(409).json({
 				ok: false,
-				message: 'There is already a user with that CI',
+				message: 'Ya existe un usuario con esa CI.',
 			});
 		}
 		return res.status(500).json({
@@ -120,7 +120,7 @@ export const loginUser = async (req: Request, res: Response) => {
 		if (userResponse.length === 0) {
 			return res.status(404).json({
 				ok: false,
-				message: 'Incorrect email or password.',
+				message: 'Email o contraseña incorrecta.',
 			});
 		}
 
@@ -129,7 +129,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
 		if (!validPassword) {
 			return res.status(401).json({
-				message: 'Incorrect email or password.',
+				message: 'Email o contraseña incorrecta.',
 			});
 		}
 
@@ -162,7 +162,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
 		return res.status(200).json({
 			ok: true,
-			message: 'Correct email and password',
+			message: 'Email y contraseña correctos.',
 			data: {
 				user,
 				token,
@@ -198,7 +198,7 @@ export const renewToken = async (req: Request, res: Response) => {
 
 		if (userResponse.length === 0) {
 			return res.status(404).json({
-				errors: [{ msg: 'User not found.' }],
+				errors: [{ msg: 'Usuario no encontrado.' }],
 			});
 		}
 

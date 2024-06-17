@@ -57,7 +57,7 @@ export const createPrediction = async (req: Request, res: Response) => {
 
 		return res.status(200).json({
 			ok: true,
-			message: 'Prediction created.',
+			message: 'Predicción creada.',
 			data: response[0],
 		});
 	} catch (error: any) {
@@ -65,7 +65,7 @@ export const createPrediction = async (req: Request, res: Response) => {
 		if (error.code === 'ER_DUP_ENTRY') {
 			return res.status(409).json({
 				ok: false,
-				message: 'You have already done a prediction for this game.',
+				message: 'Ya has hecho una predicción para este juego.',
 			});
 		}
 		if (error.code === 'ER_SIGNAL_EXCEPTION') {
@@ -143,7 +143,7 @@ export const updatePrediction = async (req: Request, res: Response) => {
 		if (game[0].local_result !== null || game[0].visitor_result !== null) {
 			return res.status(400).json({
 				ok: false,
-				message: 'Este partido ya termino.',
+				message: 'Este partido ya terminó.',
 			});
 		}
 
@@ -164,7 +164,7 @@ export const updatePrediction = async (req: Request, res: Response) => {
 
 		return res.status(200).json({
 			ok: true,
-			message: 'Prediction Updated!.',
+			message: 'Predicción actualizada.',
 			data: response[0],
 		});
 	} catch (error: any) {

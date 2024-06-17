@@ -48,7 +48,7 @@ export const createGame = async (req: Request, res: Response) => {
 
 		return res.status(200).json({
 			ok: true,
-			message: 'Game created',
+			message: 'Partido creado',
 			data: response[0],
 		});
 	} catch (error: any) {
@@ -56,7 +56,7 @@ export const createGame = async (req: Request, res: Response) => {
 		if (error.code === 'ER_DUP_ENTRY') {
 			return res.status(409).json({
 				ok: false,
-				message: 'There is already a game with that ID.',
+				message: 'Ya hay un juego con ese ID.',
 			});
 		}
 		if (error.code === 'ER_SIGNAL_EXCEPTION') {
