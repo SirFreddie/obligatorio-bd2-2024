@@ -3,7 +3,6 @@ import { Component, OnInit, inject } from '@angular/core';
 import { IGame } from '../../../../core/models/interfaces/IGame.interface';
 import { ApiService } from '../../../../core/services/api.service';
 import { MatchListComponent } from '../../../../shared/components/match-list/match-list.component';
-import { STAGES } from '../../../../shared/helpers/constants';
 import { MatchTabsComponent } from '../../../../shared/components/match-tabs/match-tabs.component';
 import { AuthService } from '../../../../core/services/auth.service';
 import { IPrediction } from '../../../../core/models/interfaces/IPrediction.interface';
@@ -23,6 +22,10 @@ export default class FixtureComponent implements OnInit {
   predictions: IPrediction[] = [];
 
   ngOnInit(): void {
+    this.getGames();
+  }
+
+  getGames() {
     this.apiService.getNextGames().subscribe({
       next: games => {
         this.games = games;

@@ -129,7 +129,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
 		if (!validPassword) {
 			return res.status(401).json({
-				msg: 'Incorrect email or password.',
+				message: 'Incorrect email or password.',
 			});
 		}
 
@@ -145,6 +145,17 @@ export const loginUser = async (req: Request, res: Response) => {
 		}
 
 		const token = await generateJWT(user.user_id.toString());
+
+		if (role === 'student') {
+			const studentQuery = `
+				SELECT * FROM student WHERE student_id = ?;
+			`;
+			const [studentResponse]: any = await pool.query(studentQuery, [
+				user.user_id,
+			]);
+
+			user.points = studentResponse[0].points;
+		}
 
 		delete user.password;
 		user.role = role;
@@ -202,6 +213,17 @@ export const renewToken = async (req: Request, res: Response) => {
 
 		if (adminResponse.length > 0) {
 			role = 'admin';
+		}
+
+		if (role === 'student') {
+			const studentQuery = `
+				SELECT * FROM student WHERE student_id = ?;
+			`;
+			const [studentResponse]: any = await pool.query(studentQuery, [
+				user.user_id,
+			]);
+
+			user.points = studentResponse[0].points;
 		}
 
 		delete user.password;

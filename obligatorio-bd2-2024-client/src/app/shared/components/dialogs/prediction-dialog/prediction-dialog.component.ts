@@ -19,10 +19,12 @@ export class PredictionDialogComponent {
   localResult: FormControl = new FormControl(0, [
     Validators.required,
     Validators.min(0),
+    Validators.max(100),
   ]);
   visitorResult: FormControl = new FormControl(0, [
     Validators.required,
     Validators.min(0),
+    Validators.max(100),
   ]);
 
   game!: IGame;
