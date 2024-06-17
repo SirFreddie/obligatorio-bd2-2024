@@ -37,14 +37,14 @@
               class="btn btn-success"
               [disabled]="!checkIfCanPredict(game)"
               (click)="createPrediction(game)">
-              Predict
+              Predecir
             </button>
             <button
               *ngIf="checkIfCanPredict(game) && getPrediction(game)"
               class="btn btn-primary"
               [disabled]="!checkIfCanPredict(game)"
               (click)="updatePrediction(game)">
-              Edit Prediction
+              Editar
             </button>
             <span *ngIf="hasResults(game) && getPrediction(game)"
               >Puntos: {{ getPrediction(game)?.points }}</span
@@ -56,7 +56,7 @@
               class="btn btn-primary"
               [disabled]="checkIfCanEdit(game)"
               (click)="updateGame(game)">
-              Edit
+              Editar
             </button>
           </div>
         </div>
@@ -90,7 +90,7 @@
         </div>
       </div>
       <div class="card-footer d-flex justify-content-between">
-        <p>{{ game.date | date: 'full' }}</p>
+        <p>{{ game.date | date: "EEEE, d 'de' MMMM 'de' y, h:mm" }}</p>
         <p>{{ game.stage }}</p>
       </div>
     </div>

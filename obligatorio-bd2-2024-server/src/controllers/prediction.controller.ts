@@ -140,7 +140,7 @@ export const updatePrediction = async (req: Request, res: Response) => {
 
 		return res.status(200).json({
 			ok: true,
-			message: 'Prediction updated.',
+			message: 'Prediction Updated!.',
 			data: response[0],
 		});
 	} catch (error: any) {

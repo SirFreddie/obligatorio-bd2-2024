@@ -187,7 +187,7 @@ export const updateGame = async (req: Request, res: Response) => {
 
 		return res.status(200).json({
 			ok: true,
-			message: 'Game updated and predictions scored.',
+			message: 'Juego cargado y predicciones puntuadas.',
 		});
 	} catch (error: any) {
 		if (connection) {

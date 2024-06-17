@@ -1,7 +1,7 @@
 <div class="container-fluid mt-3">
   <form [formGroup]="createMatchForm" class="row g-3">
     <div class="col-md-6">
-      <label class="form-label">Local Team</label>
+      <label class="form-label">Equipo Local</label>
       <select
         class="form-select"
         formControlName="localTeam"
@@ -15,7 +15,7 @@
       </select>
     </div>
     <div class="col-md-6">
-      <label class="form-label">Visitor Team</label>
+      <label class="form-label">Equipo Visitante</label>
       <select
         class="form-select"
         formControlName="visitorTeam"
@@ -29,7 +29,7 @@
       </select>
     </div>
     <div class="col-md-6">
-      <label class="form-label">Game Stage</label>
+      <label class="form-label">Etapa de Juego</label>
       <select class="form-select" formControlName="stage">
         <option value="" selected>-</option>
         <option *ngFor="let stage of stages" [value]="stage">
@@ -38,7 +38,7 @@
       </select>
     </div>
     <div class="col-md-6 d-flex flex-column">
-      <label class="form-label">Date</label>
+      <label class="form-label">Fecha</label>
       <p-calendar
         formControlName="date"
         [showTime]="true"
@@ -52,7 +52,7 @@
         class="btn btn-success"
         [disabled]="createMatchForm.invalid"
         (click)="openCreateMatchDialog($event)">
-        Create Game
+        Crear Juego
       </button>
     </div>
   </form>
