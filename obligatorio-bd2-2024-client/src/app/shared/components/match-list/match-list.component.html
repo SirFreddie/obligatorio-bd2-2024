@@ -90,12 +90,12 @@
         </div>
       </div>
       <div class="card-footer d-flex justify-content-between">
-        <p>{{ game.date | date: "EEEE, d 'de' MMMM 'de' y, h:mm" }}</p>
+        <p>
+          {{ game.date | date: "EEEE, d 'de' MMMM 'de' y, h:mm" | titlecase }}
+        </p>
         <p>{{ game.stage }}</p>
       </div>
     </div>
-
-    <div class="alert alert-warning">No hay partidos disponibles.</div>
   </div>
 
   <p-toast position="bottom-center" />
