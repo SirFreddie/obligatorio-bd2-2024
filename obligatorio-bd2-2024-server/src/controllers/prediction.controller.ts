@@ -123,6 +123,30 @@ export const updatePrediction = async (req: Request, res: Response) => {
 			team_id_visitor,
 		} = req.body;
 
+		const queryCheck = `
+						SELECT *
+						FROM game
+						WHERE team_id_local = ? AND team_id_visitor = ? AND stage = ?;
+				`;
+		const queryCheckValues = [team_id_local, team_id_visitor, stage];
+
+		const [game] = await pool.query(queryCheck, queryCheckValues);
+		console.log(game);
+
+		if (!game[0]) {
+			return res.status(400).json({
+				ok: false,
+				message: 'Este partido no existe.',
+			});
+		}
+
+		if (game[0].local_result !== null || game[0].visitor_result !== null) {
+			return res.status(400).json({
+				ok: false,
+				message: 'Este partido ya termino.',
+			});
+		}
+
 		const query = `
 						UPDATE prediction
 						SET local_result = ?, visitor_result = ?

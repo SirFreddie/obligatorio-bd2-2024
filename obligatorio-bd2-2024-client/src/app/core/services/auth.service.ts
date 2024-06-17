@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IUser } from '../models/interfaces/IUser.interface';
+import { IStudent, IUser } from '../models/interfaces/IUser.interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, of, tap } from 'rxjs';
 
@@ -9,9 +9,9 @@ import { catchError, map, of, tap } from 'rxjs';
 export class AuthService {
   baseUrl = 'http://localhost:3000/api';
 
-  private _activeUser: IUser | null = null;
+  private _activeUser: IStudent | null = null;
 
-  get activeUser(): IUser | null {
+  get activeUser(): IStudent | null {
     return this._activeUser;
   }
 
@@ -25,8 +25,8 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  register(user: IUser) {
-    return this.http.post<IUser>(`${this.baseUrl}/users/new`, user);
+  register(user: IStudent) {
+    return this.http.post<IStudent>(`${this.baseUrl}/users/new`, user);
   }
 
   login(email: string, password: string) {

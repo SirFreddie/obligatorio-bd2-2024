@@ -54,11 +54,7 @@ export default class DashboardComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.apiService.getNextGames().subscribe({
-      next: games => {
-        this.games = games;
-      },
-    });
+    this.getGames();
     this.apiService.getTeams().subscribe({
       next: teams => {
         this.countries = teams;
@@ -127,5 +123,13 @@ export default class DashboardComponent implements OnInit {
         country => country.team_id !== secondCountryValue
       );
     }
+  }
+
+  getGames() {
+    this.apiService.getNextGames().subscribe({
+      next: games => {
+        this.games = games;
+      },
+    });
   }
 }
