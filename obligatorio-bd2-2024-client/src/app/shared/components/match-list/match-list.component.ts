@@ -1,12 +1,6 @@
-import { CommonModule } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  inject,
-} from '@angular/core';
+import { CommonModule, registerLocaleData } from '@angular/common';
+import { Component, EventEmitter, Input, OnInit, Output, inject, LOCALE_ID } from '@angular/core';
+import localeEs from '@angular/common/locales/es';
 import { IGame } from '../../../core/models/interfaces/IGame.interface';
 import {
   DialogService,
@@ -21,6 +15,8 @@ import { ToastModule } from 'primeng/toast';
 import { FlagService } from '../../../core/services/flag.service';
 import { AuthService } from '../../../core/services/auth.service';
 
+registerLocaleData(localeEs);
+
 @Component({
   selector: 'app-match-list',
   standalone: true,
@@ -31,6 +27,7 @@ import { AuthService } from '../../../core/services/auth.service';
     ApiService,
     MessageService,
     FlagService,
+    {provide: LOCALE_ID, useValue: 'es'}
   ],
   templateUrl: './match-list.component.html',
   styleUrl: './match-list.component.scss',
@@ -125,8 +122,8 @@ export class MatchListComponent implements OnInit {
               }
               this.messageService.add({
                 severity: 'success',
-                summary: 'Confirmed',
-                detail: 'Prediction updated!.',
+                summary: 'Listo',
+                detail: 'Predicción actualizada!',
                 life: 3000,
               });
             },
@@ -146,7 +143,7 @@ export class MatchListComponent implements OnInit {
 
   updateGame(game: IGame) {
     this.updateGameDialog = this.dialogService.open(PredictionDialogComponent, {
-      header: 'Set Game Results',
+      header: 'Resultado del juego',
       data: game,
     });
 
@@ -158,7 +155,7 @@ export class MatchListComponent implements OnInit {
               this.updateGameEvent.emit(game);
               this.messageService.add({
                 severity: 'success',
-                summary: 'Confirmed',
+                summary: 'Listo',
                 detail: response.message,
                 life: 3000,
               });

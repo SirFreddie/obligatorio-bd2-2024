@@ -24,13 +24,13 @@
           class="nav-link"
           routerLinkActive="fw-bolder"
           routerLink="/home/fixture"
-          >Fixture</a
+          >Partidos</a
         >
         <a
           class="nav-link"
           routerLinkActive="fw-bolder"
           routerLink="home/leaderboard"
-          >Leaderboard</a
+          >Ranking</a
         >
 
         <a
@@ -57,14 +57,14 @@
           type="button"
           class="btn btn-outline-primary"
           routerLink="/auth/login">
-          Login
+          LogIn
         </button>
         <button
           *ngIf="!authService.activeUser"
           type="button"
           class="btn btn-success"
           routerLink="/auth/register">
-          Register
+          Registro
         </button>
         <button
           *ngIf="authService.activeUser"

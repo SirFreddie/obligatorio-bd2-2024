@@ -1,18 +1,18 @@
 <div class="container">
-  <h3 class="mt-3 mb-3">Leaderboard</h3>
+  <h3 class="mt-3 mb-3">Ranking</h3>
   <table class="table table-striped">
     <thead>
       <tr>
-        <th scope="col">Position</th>
-        <th scope="col">Name</th>
-        <th scope="col">Score</th>
+        <th scope="col">Posición</th>
+        <th scope="col">Nombre</th>
+        <th class="text-center" scope="col">Puntaje</th>
       </tr>
     </thead>
     <tbody class="table-group-divider">
       <tr *ngFor="let student of students; let i = index">
         <th scope="row">#{{ i + 1 }}</th>
         <td>{{ student.name }} {{ student.surname }}</td>
-        <td>{{ student.points }}</td>
+        <td class="text-center">{{ student.points }} pts</td>
       </tr>
     </tbody>
   </table>

@@ -32,7 +32,7 @@ export const getTeamById = async (req: Request, res: Response) => {
 		if (response[0].length === 0) {
 			return res.status(404).json({
 				ok: false,
-				message: 'Team not found',
+				message: 'Equipo no encontrado.',
 			});
 		}
 

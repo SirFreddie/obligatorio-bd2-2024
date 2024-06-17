@@ -1,104 +1,102 @@
 <div class="container">
-  @if (games.length) {
-    <div class="card my-5" *ngFor="let game of games">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div class="d-flex justify-content-center align-items-center gap-2">
-            <img
-              [src]="getFlagUrl(game.teamLocaleCode)"
-              alt="{{ game.teamLocale }}"
-              width="32"
-              height="32" />
-            <span>
-              {{ game.teamLocale }}
+  <div class="card my-5" *ngFor="let game of games">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex justify-content-center align-items-center gap-2">
+          <img
+            [src]="getFlagUrl(game.teamLocaleCode)"
+            alt="{{ game.teamLocale }}"
+            width="32"
+            height="32" />
+          <span>
+            {{ game.teamLocale }}
+          </span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <div>
+            <span class="fs-3 fw-bolder">
+              {{ game.scoreLocale !== null ? game.scoreLocale : '-' }}
             </span>
           </div>
-          <div class="d-flex align-items-center gap-2">
-            <div>
-              <span class="fs-3 fw-bolder">
-                {{ game.scoreLocale !== null ? game.scoreLocale : '-' }}
-              </span>
-            </div>
-            <div *ngIf="getPrediction(game)">
-              <span
-                [ngClass]="
-                  getPredictionColor(
-                    game.scoreLocale,
-                    getPrediction(game)!.local_result
-                  )
-                ">
-                ({{ getPrediction(game)?.local_result }})
-              </span>
-            </div>
-          </div>
-          <div class="d-flex gap-2">
-            <div *ngIf="authService.isStudent">
-              <button
-                *ngIf="checkIfCanPredict(game) && !getPrediction(game)"
-                class="btn btn-success"
-                [disabled]="!checkIfCanPredict(game)"
-                (click)="createPrediction(game)">
-                Predict
-              </button>
-              <button
-                *ngIf="checkIfCanPredict(game) && getPrediction(game)"
-                class="btn btn-primary"
-                [disabled]="!checkIfCanPredict(game)"
-                (click)="updatePrediction(game)">
-                Edit Prediction
-              </button>
-              <span *ngIf="hasResults(game) && getPrediction(game)"
-                >Puntos: {{ getPrediction(game)?.points }}</span
-              >
-            </div>
-
-            <div *ngIf="authService.isAdmin && !checkIfCanEdit(game)">
-              <button
-                class="btn btn-primary"
-                [disabled]="checkIfCanEdit(game)"
-                (click)="updateGame(game)">
-                Set Results
-              </button>
-            </div>
-          </div>
-          <div class="d-flex align-items-center gap-2">
-            <div *ngIf="getPrediction(game)">
-              <span
-                [ngClass]="
-                  getPredictionColor(
-                    game.scoreVisitor,
-                    getPrediction(game)!.visitor_result
-                  )
-                ">
-                ({{ getPrediction(game)?.visitor_result }})
-              </span>
-            </div>
-            <div>
-              <span class="fs-3 fw-bolder">{{
-                game.scoreVisitor !== null ? game.scoreVisitor : '-'
-              }}</span>
-            </div>
-          </div>
-          <div class="d-flex justify-content-center align-items-center gap-2">
-            <span>
-              {{ game.teamVisitor }}
+          <div *ngIf="getPrediction(game)">
+            <span
+              [ngClass]="
+                getPredictionColor(
+                  game.scoreLocale,
+                  getPrediction(game)!.local_result
+                )
+              ">
+              ({{ getPrediction(game)?.local_result }})
             </span>
-            <img
-              [src]="getFlagUrl(game.teamVisitorCode)"
-              alt="{{ game.teamVisitor }}"
-              width="32"
-              height="32" />
           </div>
         </div>
-        <div class="card-footer d-flex justify-content-between">
-          <p>{{ game.date | date: 'full' }}</p>
-          <p>{{ game.stage }}</p>
+        <div class="d-flex gap-2">
+          <div *ngIf="authService.isStudent">
+            <button
+              *ngIf="checkIfCanPredict(game) && !getPrediction(game)"
+              class="btn btn-success"
+              [disabled]="!checkIfCanPredict(game)"
+              (click)="createPrediction(game)">
+              Predecir
+            </button>
+            <button
+              *ngIf="checkIfCanPredict(game) && getPrediction(game)"
+              class="btn btn-primary"
+              [disabled]="!checkIfCanPredict(game)"
+              (click)="updatePrediction(game)">
+              Editar
+            </button>
+            <span *ngIf="hasResults(game) && getPrediction(game)"
+              >Puntos: {{ getPrediction(game)?.points }}</span
+            >
+          </div>
+
+          <div *ngIf="authService.isAdmin && !checkIfCanEdit(game)">
+            <button
+              class="btn btn-primary"
+              [disabled]="checkIfCanEdit(game)"
+              (click)="updateGame(game)">
+              Cargar Resultado
+            </button>
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <div *ngIf="getPrediction(game)">
+            <span
+              [ngClass]="
+                getPredictionColor(
+                  game.scoreVisitor,
+                  getPrediction(game)!.visitor_result
+                )
+              ">
+              ({{ getPrediction(game)?.visitor_result }})
+            </span>
+          </div>
+          <div>
+            <span class="fs-3 fw-bolder">{{
+              game.scoreVisitor !== null ? game.scoreVisitor : '-'
+            }}</span>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center align-items-center gap-2">
+          <span>
+            {{ game.teamVisitor }}
+          </span>
+          <img
+            [src]="getFlagUrl(game.teamVisitorCode)"
+            alt="{{ game.teamVisitor }}"
+            width="32"
+            height="32" />
         </div>
       </div>
+      <div class="card-footer d-flex justify-content-between">
+        <p>{{ game.date | date: "EEEE, d 'de' MMMM 'de' y, h:mm" }}</p>
+        <p>{{ game.stage }}</p>
+      </div>
     </div>
-  } @else {
-    <div class="alert alert-warning">No hay partidos disponibles.</div>
-  }
-</div>
 
-<p-toast position="bottom-center" />
+    <div class="alert alert-warning">No hay partidos disponibles.</div>
+  </div>
+
+  <p-toast position="bottom-center" />
+</div>
