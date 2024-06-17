@@ -41,7 +41,17 @@
           >Dashboard</a
         >
       </div>
-      <div class="d-lg-flex col-lg-3 justify-content-lg-end gap-2">
+      <div
+        class="d-lg-flex col-lg-3 justify-content-lg-end align-items-center gap-2">
+        <div class="d-flex flex-column align-items-end">
+          <span class="fw-bolder" *ngIf="authService.activeUser"
+            >{{ authService.activeUser.name }}
+            {{ authService.activeUser.surname }}</span
+          >
+          <span *ngIf="authService.activeUser?.role === 'student'"
+            >Pts: {{ authService.activeUser?.points }}</span
+          >
+        </div>
         <button
           *ngIf="!authService.activeUser"
           type="button"

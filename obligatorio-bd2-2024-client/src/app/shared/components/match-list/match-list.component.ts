@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, Output, inject } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  inject,
+} from '@angular/core';
 import { IGame } from '../../../core/models/interfaces/IGame.interface';
 import {
   DialogService,
@@ -11,7 +18,6 @@ import { IPrediction } from '../../../core/models/interfaces/IPrediction.interfa
 import { ApiService } from '../../../core/services/api.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { EventEmitter } from 'stream';
 import { FlagService } from '../../../core/services/flag.service';
 import { AuthService } from '../../../core/services/auth.service';
 
@@ -31,6 +37,7 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class MatchListComponent implements OnInit {
   @Input() games: IGame[] = [];
+  @Output() updateGameEvent = new EventEmitter<IGame>();
   predictions: IPrediction[] = [];
 
   dialogService: DialogService = inject(DialogService);
@@ -67,6 +74,13 @@ export class MatchListComponent implements OnInit {
         if (prediction) {
           this.apiService.createPrediction(prediction).subscribe({
             next: () => {
+              if (this.authService.activeUser && this.authService.isStudent) {
+                this.apiService
+                  .getUserPredictions(this.authService.activeUser?.user_id)
+                  .subscribe({
+                    next: predictions => (this.predictions = predictions),
+                  });
+              }
               this.messageService.add({
                 severity: 'success',
                 summary: 'Confirmed',
@@ -102,6 +116,13 @@ export class MatchListComponent implements OnInit {
         if (prediction) {
           this.apiService.updatePrediction(prediction).subscribe({
             next: () => {
+              if (this.authService.activeUser && this.authService.isStudent) {
+                this.apiService
+                  .getUserPredictions(this.authService.activeUser?.user_id)
+                  .subscribe({
+                    next: predictions => (this.predictions = predictions),
+                  });
+              }
               this.messageService.add({
                 severity: 'success',
                 summary: 'Confirmed',
@@ -134,6 +155,7 @@ export class MatchListComponent implements OnInit {
         if (game) {
           this.apiService.updateGame(game).subscribe({
             next: response => {
+              this.updateGameEvent.emit(game);
               this.messageService.add({
                 severity: 'success',
                 summary: 'Confirmed',
