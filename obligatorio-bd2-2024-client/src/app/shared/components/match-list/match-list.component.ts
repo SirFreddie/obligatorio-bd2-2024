@@ -80,8 +80,8 @@ export class MatchListComponent implements OnInit {
               }
               this.messageService.add({
                 severity: 'success',
-                summary: 'Confirmed',
-                detail: 'Prediction done!.',
+                summary: 'Listo',
+                detail: 'Predicción realizada!.',
                 life: 3000,
               });
             },
@@ -103,7 +103,7 @@ export class MatchListComponent implements OnInit {
     this.updatePredictionRefDialog = this.dialogService.open(
       PredictionDialogComponent,
       {
-        header: 'Prediction',
+        header: 'Predicción',
         data: game,
       }
     );
