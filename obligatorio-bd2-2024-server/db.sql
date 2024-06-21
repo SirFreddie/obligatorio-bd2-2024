@@ -14,28 +14,30 @@ CREATE TABLE IF NOT EXISTS `penca_ucu`.`user` (
 CREATE TABLE IF NOT EXISTS `penca_ucu`.`team` (
   `team_id` VARCHAR(3) NOT NULL,
   `name` VARCHAR(45) NOT NULL,
+  `team_code` VARCHAR(3) NOT NULL,
   PRIMARY KEY (`team_id`)
 );
 
 INSERT INTO
-  `penca_ucu`.`team` (`team_id`, `name`)
+  `penca_ucu`.`team` (`team_id`, `name`, `team_code`)
 VALUES
-  ('ARG', 'Argentina'),
-  ('BOL', 'Bolivia'),
-  ('BRA', 'Brazil'),
-  ('CHI', 'Chile'),
-  ('COL', 'Colombia'),
-  ('ECU', 'Ecuador'),
-  ('PAR', 'Paraguay'),
-  ('PER', 'Peru'),
-  ('URU', 'Uruguay'),
-  ('VEN', 'Venezuela'),
-  ('USA', 'United States'),
-  ('MEX', 'Mexico'),
-  ('CAN', 'Canada'),
-  ('CRC', 'Costa Rica'),
-  ('JAM', 'Jamaica'),
-  ('PAN', 'Panama');
+  ('ARG', 'Argentina', 'AR'),
+  ('BOL', 'Bolivia', 'BO'),
+  ('BRA', 'Brazil', 'BR'),
+  ('CHI', 'Chile', 'CL'),
+  ('COL', 'Colombia', 'CO'),
+  ('ECU', 'Ecuador', 'EC'),
+  ('PAR', 'Paraguay', 'PY'),
+  ('PER', 'Peru', 'PE'),
+  ('URU', 'Uruguay', 'UY'),
+  ('VEN', 'Venezuela', 'VE'),
+  ('USA', 'United States', 'US'),
+  ('MEX', 'Mexico', 'MX'),
+  ('CAN', 'Canada', 'CA'),
+  ('CRC', 'Costa Rica', 'CR'),
+  ('JAM', 'Jamaica', 'JM'),
+  ('PAN', 'Panama', 'PA');
+
 
 CREATE TABLE IF NOT EXISTS `penca_ucu`.`career` (
   `career_id` INT NOT NULL AUTO_INCREMENT,

@@ -86,4 +86,10 @@ export class ApiService {
   updatePrediction(prediction: IPrediction): Observable<any> {
     return this.http.put(`${this.baseUrl}/predictions`, prediction);
   }
+
+  getStatistics(): Observable<any> {
+    return this.http
+      .get(`${this.baseUrl}/users/statistics`)
+      .pipe(map((res: any) => res.data));
+  }
 }

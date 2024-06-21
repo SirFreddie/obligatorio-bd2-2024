@@ -5,12 +5,18 @@ import {
 	getStudentPredictions,
 	updatePrediction,
 } from '../controllers/prediction.controller';
+import { validateJWT } from '../middlewares/validate-jwt';
+import { validateStudent } from '../middlewares/validate-student';
 
 const router = Router();
 
-router.get('/', getPredictions);
-router.get('/:studentId', getStudentPredictions);
-router.put('/', updatePrediction);
-router.post('/new', createPrediction);
+router.get('/', [validateJWT, validateJWT], getPredictions);
+router.get(
+	'/:studentId',
+	[validateJWT, validateStudent],
+	getStudentPredictions
+);
+router.put('/', [validateJWT, validateStudent], updatePrediction);
+router.post('/new', [validateJWT, validateStudent], createPrediction);
 
 export default router;
