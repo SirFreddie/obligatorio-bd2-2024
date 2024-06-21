@@ -74,9 +74,15 @@ export const createUser = async (req: Request, res: Response) => {
 				message: 'Ya existe un usuario con esa CI.',
 			});
 		}
+		if (error.code === 'ER_CHECK_CONSTRAINT_VIOLATED') {
+			return res.status(400).json({
+				ok: false,
+				message: 'Las predicciones no pueden ser iguales.',
+			});
+		}
 		return res.status(500).json({
 			ok: false,
-			message: 'Internal server error',
+			message: 'Internal server error.',
 		});
 	} finally {
 		if (connection) {
@@ -103,7 +109,7 @@ export const getPoints = async (req: Request, res: Response) => {
 		console.error(error);
 		return res.status(500).json({
 			ok: false,
-			message: 'Internal server error',
+			message: 'Internal server error.',
 		});
 	}
 };
@@ -144,7 +150,11 @@ export const loginUser = async (req: Request, res: Response) => {
 			role = 'admin';
 		}
 
-		const token = await generateJWT(user.user_id.toString());
+		const payload = {
+			uid: user.user_id,
+			role,
+		};
+		const token = await generateJWT(payload);
 
 		if (role === 'student') {
 			const studentQuery = `
@@ -172,7 +182,7 @@ export const loginUser = async (req: Request, res: Response) => {
 		console.error(error);
 		return res.status(500).json({
 			ok: false,
-			message: 'Internal server error',
+			message: 'Internal server error.',
 		});
 	}
 };
@@ -186,10 +196,14 @@ export const renewToken = async (req: Request, res: Response) => {
 		});
 	}
 
-	const { uid } = jwt.decode(token) as JwtPayload;
+	const { uid, role } = jwt.decode(token) as JwtPayload;
 
 	try {
-		const newToken = await generateJWT(uid);
+		const payload = {
+			uid,
+			role,
+		};
+		const newToken = await generateJWT(payload);
 
 		const userQuery = `
 						SELECT * FROM user WHERE user_id = ?;
@@ -204,7 +218,7 @@ export const renewToken = async (req: Request, res: Response) => {
 
 		const user = userResponse[0];
 
-		let role = 'student';
+		let userRole = 'student';
 
 		const adminQuery = `
             SELECT * FROM admin WHERE admin_id = ?;
@@ -212,10 +226,10 @@ export const renewToken = async (req: Request, res: Response) => {
 		const [adminResponse]: any = await pool.query(adminQuery, [user.user_id]);
 
 		if (adminResponse.length > 0) {
-			role = 'admin';
+			userRole = 'admin';
 		}
 
-		if (role === 'student') {
+		if (userRole === 'student') {
 			const studentQuery = `
 				SELECT * FROM student WHERE student_id = ?;
 			`;
@@ -227,7 +241,7 @@ export const renewToken = async (req: Request, res: Response) => {
 		}
 
 		delete user.password;
-		user.role = role;
+		user.role = userRole;
 
 		return res.status(200).json({
 			ok: true,
@@ -240,6 +254,47 @@ export const renewToken = async (req: Request, res: Response) => {
 		console.error(error);
 		return res.status(500).json({
 			errors: [{ msg: 'Internal server error.' }],
+		});
+	}
+};
+
+export const getStatistics = async (req: Request, res: Response) => {
+	try {
+		const query = `
+			SELECT
+			c.name AS career_name,
+			AVG(
+					CASE
+							WHEN p.local_result = g.local_result AND p.visitor_result = g.visitor_result THEN 1
+							ELSE 0
+					END
+			) * 100 AS accuracy_percentage
+			FROM
+					career c
+			JOIN
+					student_career sc ON c.career_id = sc.career_id
+			JOIN
+					student s ON sc.student_id = s.student_id
+			JOIN
+					prediction p ON s.student_id = p.student_id
+			JOIN
+					game g ON p.stage = g.stage AND p.team_id_local = g.team_id_local AND p.team_id_visitor = g.team_id_visitor
+			GROUP BY
+					c.name;
+		`;
+
+		const [statistics]: any = await pool.query(query);
+		return res.status(200).json({
+			ok: true,
+			data: {
+				statistics,
+			},
+		});
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({
+			ok: false,
+			message: 'Internal server error',
 		});
 	}
 };

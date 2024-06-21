@@ -11,6 +11,14 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./pages/dashboard/dashboard.component'),
       },
       {
+        path: 'insights',
+        title: 'Insights',
+        loadComponent: () =>
+          import('./pages/insights/insights.component').then(
+            m => m.InsightsComponent
+          ),
+      },
+      {
         path: '**',
         redirectTo: 'dashboard',
         pathMatch: 'full',

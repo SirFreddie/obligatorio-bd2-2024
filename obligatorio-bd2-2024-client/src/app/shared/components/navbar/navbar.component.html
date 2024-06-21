@@ -29,7 +29,7 @@
         <a
           class="nav-link"
           routerLinkActive="fw-bolder"
-          routerLink="home/leaderboard"
+          routerLink="/home/leaderboard"
           >Ranking</a
         >
 
@@ -37,8 +37,15 @@
           *ngIf="authService.isAdmin"
           class="nav-link"
           routerLinkActive="fw-bolder"
-          routerLink="/admin"
+          routerLink="/admin/dashboard"
           >Dashboard</a
+        >
+        <a
+          *ngIf="authService.isAdmin"
+          class="nav-link"
+          routerLinkActive="fw-bolder"
+          routerLink="/admin/insights"
+          >Estadisticas</a
         >
       </div>
       <div
