@@ -1,0 +1,39 @@
+services:
+  frontend:
+    build:
+      context: ./obligatorio-bd2-2024-client
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./obligatorio-bd2-2024-server
+    ports:
+      - "3000:3000"
+    env_file: ./.env
+    environment:
+      - PORT=3000
+      - DB_HOST=database
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - MAILER_SERVICE=${MAILER_SERVICE}
+      - MAILER_EMAIL=${MAILER_EMAIL}
+      - MAILER_SECRET_KEY=${MAILER_SECRET_KEY}
+      - SECRETKEY=${SECRETKEY}
+    depends_on:
+      - database
+
+  database:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    env_file: ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci

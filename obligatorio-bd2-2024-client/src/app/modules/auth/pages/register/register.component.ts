@@ -18,6 +18,7 @@ import { NgFor, NgForOf } from '@angular/common';
 import { MatchListComponent } from '../../../../shared/components/match-list/match-list.component';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -37,6 +38,7 @@ import { ToastModule } from 'primeng/toast';
 export default class RegisterComponent implements OnInit {
   apiService: ApiService = inject(ApiService);
   fb = inject(FormBuilder);
+  router = inject(Router);
   messageService: MessageService = inject(MessageService);
 
   countries: ITeam[] = [];
@@ -45,21 +47,20 @@ export default class RegisterComponent implements OnInit {
   careers: any[] = [];
   formulario: FormGroup;
 
-  createMatchForm = this.fb.group({
-    campeon: ['', [Validators.required]],
-    subcampeon: ['', [Validators.required]],
-  });
-
   constructor(private registroService: RegistroService) {
     this.formulario = new FormGroup({
-      user_id: new FormControl(),
-      name: new FormControl(),
-      surname: new FormControl(),
-      email: new FormControl(),
-      password: new FormControl(),
-      career: new FormControl(''),
-      first_place_prediction: new FormControl(''),
-      second_place_prediction: new FormControl(''),
+      user_id: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(8),
+      ]),
+      name: new FormControl(null, [Validators.required]),
+      surname: new FormControl(null, [Validators.required]),
+      email: new FormControl(null, [Validators.required, Validators.email]),
+      password: new FormControl(null, [Validators.required]),
+      career: new FormControl('', [Validators.required]),
+      first_place_prediction: new FormControl('', [Validators.required]),
+      second_place_prediction: new FormControl('', [Validators.required]),
     });
   }
   ngOnInit(): void {
@@ -74,8 +75,8 @@ export default class RegisterComponent implements OnInit {
     this.apiService.getCareers().subscribe({
       next: careers => {
         this.careers = careers;
-      }
-    })
+      },
+    });
   }
 
   onSubmit() {
@@ -99,6 +100,7 @@ export default class RegisterComponent implements OnInit {
             detail: 'Usuario creado correctamente.',
             life: 3000,
           });
+          this.router.navigate(['/auth/login']);
         },
         error: error => {
           this.messageService.add({
@@ -117,7 +119,9 @@ export default class RegisterComponent implements OnInit {
   }
 
   updateSecondCountryOptions(): void {
-    const firstCountryValue = this.createMatchForm.get('subcampeon')?.value;
+    const firstCountryValue = this.formulario.get(
+      'first_place_prediction'
+    )?.value;
     if (firstCountryValue) {
       this.secondCountryOptions = this.countries.filter(
         country => country.team_id !== firstCountryValue
@@ -126,13 +130,13 @@ export default class RegisterComponent implements OnInit {
   }
 
   updateFirstCountryOptions(): void {
-    const secondCountryValue = this.createMatchForm.get('campeon')?.value;
+    const secondCountryValue = this.formulario.get(
+      'second_place_prediction'
+    )?.value;
     if (secondCountryValue) {
       this.firstCountryOptions = this.countries.filter(
         country => country.team_id !== secondCountryValue
       );
     }
   }
-
-
 }

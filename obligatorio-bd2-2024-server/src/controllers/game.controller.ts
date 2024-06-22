@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 export const getGames = async (req: Request, res: Response) => {
 	try {
 		const query = `
-            SELECT g.*, tl.teamCode as teamLocaleCode, tv.teamCode as teamVisitorCode
+      SELECT g.*, tl.team_code as teamLocaleCode, tv.team_code as teamVisitorCode
       FROM game g
       JOIN team tl ON g.team_id_local = tl.team_id
       JOIN team tv ON g.team_id_visitor = tv.team_id

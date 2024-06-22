@@ -76,7 +76,7 @@ export default class DashboardComponent implements OnInit {
             this.messageService.add({
               severity: 'success',
               summary: 'Confirmed',
-              detail: 'You have created a match.',
+              detail: 'Partido creado!.',
               life: 3000,
             });
           },
@@ -97,7 +97,7 @@ export default class DashboardComponent implements OnInit {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       message:
-        'Are you sure that you want to proceed? \nThis action cannot be undone and will make the game visible.',
+        'Ests seguro de que deseas continuar? \nEsta accion no se puede deshacer y hara que el juego sea visible.',
       header: 'Confirmation',
       rejectButtonStyleClass: 'p-button-text',
       accept: () => {

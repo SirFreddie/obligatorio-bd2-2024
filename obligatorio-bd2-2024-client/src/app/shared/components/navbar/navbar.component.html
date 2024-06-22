@@ -58,6 +58,7 @@
           <span *ngIf="authService.activeUser?.role === 'student'"
             >Pts: {{ authService.activeUser?.points }}</span
           >
+          <span *ngIf="authService.activeUser?.role === 'admin'">ADMIN</span>
         </div>
         <button
           *ngIf="!authService.activeUser"
