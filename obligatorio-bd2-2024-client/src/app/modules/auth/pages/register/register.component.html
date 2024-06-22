@@ -9,7 +9,7 @@
                 <div class="center-wrap">
                   <div class="section text-center">
                     <h4 class="mb-4 pb-3">Registrarse</h4>
-                    <form novalidate [formGroup]="formulario">
+                    <form [formGroup]="formulario">
                       <div class="form-group">
                         <input
                           type="text"
@@ -62,21 +62,23 @@
                       </div>
                       <div class="form-group mt-2">
                         <select formControlName="career" class="form-style">
-                            <option value="" disabled selected>Carrera</option>
-                            <option
+                          <option value="" disabled selected>Carrera</option>
+                          <option
                             *ngFor="let career of careers"
                             [value]="career.career_id">
                             {{ career.name }}
                           </option>
                         </select>
                         <i class="input-icon uil uil-lock-alt"></i>
-                    </div>
+                      </div>
                       <div class="form-group mt-2">
                         <select
                           class="form-style"
                           formControlName="first_place_prediction"
                           (change)="updateSecondCountryOptions()">
-                          <option value="" disabled selected>Elegir Campeon</option>
+                          <option value="" disabled selected>
+                            Elegir Campeon
+                          </option>
                           <option
                             *ngFor="let country of firstCountryOptions"
                             [value]="country.team_id">
@@ -89,7 +91,9 @@
                           class="form-style"
                           formControlName="second_place_prediction"
                           (change)="updateFirstCountryOptions()">
-                          <option value="" disabled selected>Elegir Sub-Campeon</option>
+                          <option value="" disabled selected>
+                            Elegir Sub-Campeon
+                          </option>
                           <option
                             *ngFor="let country of secondCountryOptions"
                             [value]="country.team_id">
@@ -97,7 +101,10 @@
                           </option>
                         </select>
                       </div>
-                      <button (click)="onSubmit()" class="btn mt-4">
+                      <button
+                        [disabled]="formulario.invalid"
+                        (click)="onSubmit()"
+                        class="btn mt-4">
                         Registrarse
                       </button>
                     </form>

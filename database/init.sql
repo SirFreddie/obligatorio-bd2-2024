@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS `penca_ucu`;
+CREATE DATABASE IF NOT EXISTS `penca_ucu` DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
 USE `penca_ucu`;
 
@@ -7,16 +7,16 @@ CREATE TABLE IF NOT EXISTS `penca_ucu`.`user` (
   `name` VARCHAR(45) NOT NULL,
   `surname` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL UNIQUE,
-  `password` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`user_id`)
-);
+) DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `penca_ucu`.`team` (
   `team_id` VARCHAR(3) NOT NULL,
   `name` VARCHAR(45) NOT NULL,
   `team_code` VARCHAR(3) NOT NULL,
   PRIMARY KEY (`team_id`)
-);
+) DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
 INSERT INTO
   `penca_ucu`.`team` (`team_id`, `name`, `team_code`)
@@ -43,37 +43,37 @@ CREATE TABLE IF NOT EXISTS `penca_ucu`.`career` (
   `career_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`career_id`)
-);
+) DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
 INSERT INTO
   `penca_ucu`.`career` (name)
 VALUES
-  ('Ingeniería en Sistemas'),
-  ('Licenciatura en Administración'),
-  ('Contador Público'),
-  ('Licenciatura en Economía'),
+  ('Ingenieria en Sistemas'),
+  ('Licenciatura en Administracion'),
+  ('Contador Publico'),
+  ('Licenciatura en Economia'),
   ('Licenciatura en Psicología'),
   ('Medicina'),
   ('Derecho'),
-  ('Comunicación Social'),
+  ('Comunicacion Social'),
   ('Arquitectura'),
-  ('Licenciatura en Educación'),
+  ('Licenciatura en Educacion'),
   ('Licenciatura en Marketing'),
-  ('Licenciatura en Diseño Gráfico'),
+  ('Licenciatura en Diseño Grafico'),
   ('Licenciatura en Relaciones Internacionales'),
-  ('Ingeniería Industrial'),
-  ('Licenciatura en Biología'),
-  ('Licenciatura en Ciencias de la Computación'),
+  ('Ingenieria Industrial'),
+  ('Licenciatura en Biologia'),
+  ('Licenciatura en Ciencias de la Computacion'),
   ('Licenciatura en Ciencias Ambientales'),
   ('Licenciatura en Historia'),
-  ('Licenciatura en Filosofía'),
+  ('Licenciatura en Filosofia'),
   ('Licenciatura en Matemáticas');
 
 CREATE TABLE IF NOT EXISTS `penca_ucu`.`admin` (
   `admin_id` INT NOT NULL,
   PRIMARY KEY (`admin_id`),
   FOREIGN KEY (`admin_id`) REFERENCES `penca_ucu`.`user` (`user_id`)
-);
+) DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `penca_ucu`.`student` (
   `student_id` INT NOT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `penca_ucu`.`student` (
   CONSTRAINT chk_different_predictions CHECK (
     `first_place_prediction` <> `second_place_prediction`
   )
-);
+) DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `penca_ucu`.`student_career` (
   `career_id` INT NOT NULL,
@@ -95,9 +95,9 @@ CREATE TABLE IF NOT EXISTS `penca_ucu`.`student_career` (
   PRIMARY KEY (`career_id`, `student_id`),
   FOREIGN KEY (`career_id`) REFERENCES `penca_ucu`.`career` (`career_id`),
   FOREIGN KEY (`student_id`) REFERENCES `penca_ucu`.`student` (`student_id`)
-);
+) DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `game` (
+CREATE TABLE IF NOT EXISTS `penca_ucu`.`game` (
   `stage` ENUM (
     'Fase de grupos',
     'Cuartos de final',
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `game` (
   FOREIGN KEY (`team_id_local`) REFERENCES `penca_ucu`.`team` (`team_id`),
   FOREIGN KEY (`team_id_visitor`) REFERENCES `penca_ucu`.`team` (`team_id`),
   CONSTRAINT chk_different_teams CHECK (`team_id_local` <> `team_id_visitor`)
-);
+) DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
 DELIMITER $$
 
@@ -154,4 +154,4 @@ CREATE TABLE IF NOT EXISTS `penca_ucu`.`prediction` (
   UNIQUE (`student_id`, `team_id_local`, `team_id_visitor`, `stage`),
   FOREIGN KEY (`student_id`) REFERENCES `penca_ucu`.`student` (`student_id`),
   FOREIGN KEY (`team_id_local`, `team_id_visitor`, `stage`) REFERENCES `penca_ucu`.`game` (`team_id_local`, `team_id_visitor`, `stage`)
-);
+) DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;

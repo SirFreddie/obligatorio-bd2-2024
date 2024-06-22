@@ -89,11 +89,11 @@ class Server {
 				for (const email of emailAddresses) {
 					emailService.sendEmail({
 						to: email.email,
-						subject: `Penca UCU - Upcoming game: ${game.stage}`,
+						subject: `Penca UCU - Proximo partido: ${game.stage}`,
 						htmlBody: `
-						<h1>Upcoming game: ${game.stage}</h1>
+						<h1>Proximo partido: ${game.stage}</h1>
 						<br/>
-						<p>First match date: ${game.first_match_date}</p>
+						<p>Fecha del primer partido: ${game.first_match_date}</p>
 						`,
 					});
 				}
