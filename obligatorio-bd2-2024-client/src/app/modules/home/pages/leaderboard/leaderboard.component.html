@@ -9,7 +9,14 @@
       </tr>
     </thead>
     <tbody class="table-group-divider">
-      <tr *ngFor="let student of students; let i = index">
+      <tr
+        *ngFor="let student of students; let i = index"
+        [ngClass]="
+          authService.activeUser?.role === 'student' &&
+          student.user_id === authService.activeUser?.user_id
+            ? 'fw-bolder'
+            : ''
+        ">
         <th scope="row">#{{ i + 1 }}</th>
         <td>{{ student.name }} {{ student.surname }}</td>
         <td class="text-center">{{ student.points }} pts</td>

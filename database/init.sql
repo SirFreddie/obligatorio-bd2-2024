@@ -155,3 +155,71 @@ CREATE TABLE IF NOT EXISTS `penca_ucu`.`prediction` (
   FOREIGN KEY (`student_id`) REFERENCES `penca_ucu`.`student` (`student_id`),
   FOREIGN KEY (`team_id_local`, `team_id_visitor`, `stage`) REFERENCES `penca_ucu`.`game` (`team_id_local`, `team_id_visitor`, `stage`)
 ) DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
+
+INSERT INTO `penca_ucu`.`user` (`user_id`, `name`, `surname`, `email`, `password`) 
+  VALUES ('48513221', 'Rodrigo', 'Luque', 'rodrigoluquepuig@gmail.com', '$2a$10$tBNSgUZs.VTHZE8rWQj76uOGUwX4msjyGqyVPJJsk8CANdiUvy3Oi');
+
+INSERT INTO `penca_ucu`.`user` (`user_id`, `name`, `surname`, `email`, `password`) 
+  VALUES ('00000000', 'Juan', 'Perez', 'admin@admin.com', '$2a$10$tBNSgUZs.VTHZE8rWQj76uOGUwX4msjyGqyVPJJsk8CANdiUvy3Oi');
+
+INSERT INTO `penca_ucu`.`admin` (`admin_id`) VALUES ('00000000');
+
+INSERT INTO `penca_ucu`.`student` (`student_id`, `points`, `first_place_prediction`, `second_place_prediction`)
+  VALUES (48513221,	6,	'URU',	'ARG');
+
+INSERT INTO `penca_ucu`.`student_career` (`career_id`, `student_id`)
+  VALUES (1, 48513221);
+
+INSERT INTO `penca_ucu`.`game` (`stage`,`team_id_local`,`team_id_visitor`,`date`,`local_result`,`visitor_result`) VALUES
+  ('Fase de grupos','ARG','CAN','2024-06-20 19:33:59',2,0),
+  ('Fase de grupos','ARG','PER','2024-06-29 21:00:41',NULL,NULL),
+  ('Fase de grupos','BOL','PAN','2024-07-01 22:00:14',NULL,NULL),
+  ('Fase de grupos','BRA','COL','2024-07-02 22:00:54',NULL,NULL),
+  ('Fase de grupos','BRA','CRC','2024-06-24 22:00:07',NULL,NULL),
+  ('Fase de grupos','CAN','CHI','2024-06-29 21:00:03',NULL,NULL),
+  ('Fase de grupos','CHI','ARG','2024-06-25 22:00:15',NULL,NULL),
+  ('Fase de grupos','COL','CRC','2024-06-28 19:00:59',NULL,NULL),
+  ('Fase de grupos','COL','PAR','2024-06-24 19:00:40',NULL,NULL),
+  ('Fase de grupos','CRC','PAR','2024-07-02 22:00:23',NULL,NULL);
+
+INSERT INTO `penca_ucu`.`game` (`stage`,`team_id_local`,`team_id_visitor`,`date`,`local_result`,`visitor_result`) VALUES
+  ('Fase de grupos','ECU','JAM','2024-06-26 19:00:37',NULL,NULL),
+  ('Fase de grupos','ECU','VEN','2024-06-22 19:35:45',1,2),
+  ('Fase de grupos','JAM','VEN','2024-06-30 21:00:50',NULL,NULL),
+  ('Fase de grupos','MEX','ECU','2024-06-30 21:00:23',NULL,NULL),
+  ('Fase de grupos','MEX','JAM','2024-06-22 22:00:08',1,0),
+  ('Fase de grupos','PAN','USA','2024-06-27 19:00:41',NULL,NULL),
+  ('Fase de grupos','PAR','BRA','2024-06-28 22:00:37',NULL,NULL),
+  ('Fase de grupos','PER','CAN','2024-06-25 19:00:51',NULL,NULL),
+  ('Fase de grupos','PER','CHI','2024-06-21 19:35:14',0,0),
+  ('Fase de grupos','URU','BOL','2024-06-27 22:00:22',NULL,NULL);
+  
+INSERT INTO `penca_ucu`.`game` (`stage`,`team_id_local`,`team_id_visitor`,`date`,`local_result`,`visitor_result`) VALUES
+  ('Fase de grupos','URU','PAN','2024-06-23 22:00:11',NULL,NULL),
+  ('Fase de grupos','USA','BOL','2024-06-23 19:00:30',2,0),
+  ('Fase de grupos','USA','URU','2024-07-01 22:00:33',NULL,NULL),
+  ('Fase de grupos','VEN','MEX','2024-06-26 22:00:07',NULL,NULL);
+
+INSERT INTO `penca_ucu`.`prediction` (`local_result`,`visitor_result`,`student_id`,`team_id_local`,`team_id_visitor`,`stage`,`points`) VALUES
+  (3,1,48513221,'BRA','COL','Fase de grupos',0),
+  (2,0,48513221,'BRA','CRC','Fase de grupos',0),
+  (1,2,48513221,'CAN','CHI','Fase de grupos',0),
+  (1,3,48513221,'CHI','ARG','Fase de grupos',0),
+  (0,1,48513221,'COL','CRC','Fase de grupos',0),
+  (0,2,48513221,'COL','PAR','Fase de grupos',0),
+  (0,1,48513221,'CRC','PAR','Fase de grupos',0),
+  (0,0,48513221,'ECU','JAM','Fase de grupos',0),
+  (0,2,48513221,'JAM','VEN','Fase de grupos',0),
+  (2,0,48513221,'MEX','ECU','Fase de grupos',0),
+  (3,1,48513221,'ARG','PER','Fase de grupos',0),
+  (1,2,48513221,'BOL','PAN','Fase de grupos',0);
+INSERT INTO `penca_ucu`.`prediction` (`local_result`,`visitor_result`,`student_id`,`team_id_local`,`team_id_visitor`,`stage`,`points`) VALUES
+	 (1,0,48513221,'MEX','JAM','Fase de grupos',4),
+	 (1,0,48513221,'PAN','USA','Fase de grupos',0),
+	 (1,3,48513221,'PAR','BRA','Fase de grupos',0),
+	 (2,1,48513221,'PER','CAN','Fase de grupos',0),
+	 (2,1,48513221,'URU','BOL','Fase de grupos',0),
+	 (2,1,48513221,'URU','PAN','Fase de grupos',0),
+	 (2,1,48513221,'USA','BOL','Fase de grupos',2),
+	 (1,3,48513221,'USA','URU','Fase de grupos',0),
+	 (0,1,48513221,'VEN','MEX','Fase de grupos',0);

@@ -27,13 +27,16 @@ services:
       - database
 
   database:
-    image: mysql:8.0
+    image: mysql
     ports:
       - "3306:3306"
     env_file: ./.env
     environment:
+      LANG: C.utf8
+      LC_ALL: C.utf8
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
     volumes:
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    command:
+      [--character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci]

@@ -1,11 +1,17 @@
 # Dana Castroman, Gonzalo Paz, Rodrigo Luque
 
+# Probar el proyecto usando docker
+
+1. Verificar que existe el archivo .env en el root del proyecto. En caso de no tenerlo solicitarlo al grupo.
+2. Tener instalado Docker.
+3. Ejecutar el comendo `docker-compose run -d`
+
 # Instalacion del Proyecto
 
 1. Descargar el proyecto o clonarlo.
 2. Descargar e instalar Docker.
 3. Verificar que existe el archivo .env en los archivos. En caso de no tenerlo solicitarlo al grupo.
-4. Para instalar la DB abrir la consola ubicados en el proyecto y ejecutar el comando `docker-compose up -d`. Esto creara un contenedor de Docker. 
+4. Para instalar la DB abrir la consola ubicados en el proyecto y ejecutar el comando `docker-compose up -d`. Esto creara un contenedor de Docker.
 5. Instalar las dependencias del `cliente` y del `servidor` usando el comando `npm i`.
 6. Una vez instaladas la DB y ambos proyectos ejecutar el servidor ubicados en el proyecto `obligatorio-bd2-2024-server` usando el comando `npm run dev`.
 7. Para ejecutar el cliente, ubicarse en la terminal en el proyecto `obligatorio-bd2-2024-client` y ejecutar el comando `npm run start`.

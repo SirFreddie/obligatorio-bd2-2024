@@ -94,7 +94,7 @@ export const createUser = async (req: Request, res: Response) => {
 export const getPoints = async (req: Request, res: Response) => {
 	try {
 		const query = `
-            SELECT u.name, u.surname, s.points
+            SELECT u.name, u.surname, u.user_id, s.points
             FROM user u
             JOIN student s ON u.user_id = s.student_id
 						ORDER BY s.points DESC;

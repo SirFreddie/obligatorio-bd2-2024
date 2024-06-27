@@ -91,7 +91,11 @@
       </div>
       <div class="card-footer d-flex justify-content-between">
         <p>
-          {{ game.date | date: "EEEE, d 'de' MMMM 'de' y, h:mm" | titlecase }}
+          {{
+            game.date
+              | date: "EEEE, d 'de' MMMM 'de' y, 'a las' H:MM"
+              | titlecase
+          }}
         </p>
         <p>{{ game.stage }}</p>
       </div>
