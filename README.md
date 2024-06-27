@@ -5,6 +5,7 @@
 1. Verificar que existe el archivo .env en el root del proyecto. En caso de no tenerlo solicitarlo al grupo.
 2. Tener instalado Docker.
 3. Ejecutar el comendo `docker-compose run -d`
+4. Acceder a http://localhost:8080/#/home/fixture
 
 # Instalacion del Proyecto
 
